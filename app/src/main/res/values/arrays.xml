@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="courses">
+        <item>FIT5183</item>
+        <item>FIT5186</item>
+        <item>FIT5187</item>
+        <item>FIT5190</item>
+    </string-array>
+
+    <string-array name="languages">
+        <item>Chinese</item>
+        <item>English</item>
+        <item>Others</item>
+    </string-array>
+
+    <string-array name="nationality">
+        <item>China</item>
+        <item>Australia</item>
+        <item>Singapore</item>
+        <item>US</item>
+        <item>UK</item>
+    </string-array>
+
+</resources>
