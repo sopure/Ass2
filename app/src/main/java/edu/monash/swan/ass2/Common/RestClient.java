@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -89,31 +90,50 @@ public class RestClient {
         return student;
     }
     public static String Create(String entity){
-        String surl = StudentFacadeREST + "create";
+        System.out.println(entity);
+        String surl = StudentFacadeREST + "createStu";
         HttpURLConnection httpURLConnection;
         String result = "";
-        OutputStream os = null;
+        OutputStreamWriter out = null;
+        BufferedReader reader = null;
         try{
             URL url = new URL(surl);
             httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setConnectTimeout(5000);
             httpURLConnection.setDoOutput(true);
+            httpURLConnection.setDoInput(true);
             httpURLConnection.setRequestMethod("POST");
-            httpURLConnection.setRequestProperty("ser-Agent", "Fiddler");
+            httpURLConnection.setRequestProperty("connection", "keep-alive");
+            httpURLConnection.setUseCaches(false);//设置不要缓存
+            httpURLConnection.setInstanceFollowRedirects(true);
             httpURLConnection.setRequestProperty("Content-Type", "application/json");
-            os = httpURLConnection.getOutputStream();
-            os.write(entity.getBytes());
-            os.flush();
-
+            httpURLConnection.connect();
+            out = new OutputStreamWriter(httpURLConnection.getOutputStream());
+            out.write(entity);
+            out.flush();
+            //读取响应
+            reader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+            String lines;
+            while ((lines = reader.readLine()) != null) {
+                lines = new String(lines.getBytes(), "utf-8");
+                result+=lines;
+            }
+            reader.close();
+            // 断开连接
+            httpURLConnection.disconnect();
         }catch (Exception e){
+            System.out.println("发送 POST 请求出现异常！"+e);
             e.printStackTrace();
         }
         finally {
-            try {
-                if (os != null) {
-                    os.close();
+            try{
+                if(out!=null){
+                    out.close();
                 }
-            } catch (IOException ex) {
+                if(reader!=null){
+                    reader.close();
+                }
+            }
+            catch(IOException ex){
                 ex.printStackTrace();
             }
         }

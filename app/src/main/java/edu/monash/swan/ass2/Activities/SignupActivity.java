@@ -1,6 +1,7 @@
 package edu.monash.swan.ass2.Activities;
 
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -14,11 +15,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 import edu.monash.swan.ass2.Common.DatePickerFragment;
 import edu.monash.swan.ass2.Common.MD5Util;
 import edu.monash.swan.ass2.Common.RestClient;
 import edu.monash.swan.ass2.Common.Student;
 import edu.monash.swan.ass2.R;
+import edu.monash.swan.ass2.WeatherInfo.Const;
 
 // implement interface[DatePickerFragment.OnDateSetListener] declared in fragment
 public class SignupActivity extends AppCompatActivity implements DatePickerFragment.OnDateSetListener {
@@ -169,7 +173,21 @@ public class SignupActivity extends AppCompatActivity implements DatePickerFragm
                 myPswd = MD5Util.getMD5(myPswd);
                 Student stu = new Student(firstNm, surNm, doB, gender, course, studyMd, addr, suburb, nation, nativeLanguage, favoriteSpt, favoriteMv, favoriteUt, currentJb, myId, myPswd);
                 String student = stu.convert().toString();
-                RestClient.Create(student);
+                String result = RestClient.Create(student);
+                try{
+                    JSONObject jsonObject = new JSONObject(result);
+                    if(jsonObject.getInt("result") == 200){
+                        stu.setId(stu.getEmail().hashCode());
+                        Const.student = stu;
+                        Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }else {
+                        Toast.makeText(getApplicationContext(), "Registration Failed", Toast.LENGTH_SHORT).show();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         });
 

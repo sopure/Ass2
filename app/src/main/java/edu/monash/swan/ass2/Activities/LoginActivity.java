@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import edu.monash.swan.ass2.Common.MD5Util;
 import edu.monash.swan.ass2.Common.RestClient;
+import edu.monash.swan.ass2.Common.Student;
 import edu.monash.swan.ass2.R;
 import edu.monash.swan.ass2.WeatherInfo.Const;
 
@@ -82,8 +83,9 @@ public class LoginActivity extends Activity implements OnClickListener {
     private boolean verification(){
         String username = mUsername.getText().toString();
         String password = mPassword.getText().toString();
-        Const.student = RestClient.findByEmail(username);
-        if(Const.student != null && MD5Util.getMD5(password).equals(Const.student.getPassword())){
+        Student student = RestClient.findByEmail(username);
+        if(student != null && MD5Util.getMD5(password).equals(student.getPassword())){
+            Const.student = student;
             return true;
        }
         return false;
