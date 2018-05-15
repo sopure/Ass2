@@ -1,22 +1,11 @@
 package edu.monash.swan.ass2.WeatherInfo;
 
+import java.util.List;
+
 public class Weather {
-    private String text;
-    private String temperature;
+    public Now now;
+    public Suggestion suggestion;
+    public AQI aqi;
+    public List<Forecast> forecastList;
 
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getTemperature() {
-        return temperature;
-    }
-
-    public void setTemperature(String temperature) {
-        this.temperature = temperature;
-    }
 }

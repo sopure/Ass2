@@ -13,9 +13,9 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class RestClient {
-    private final static String StudentFacadeREST = "http://192.168.191.1:8080/Ass1/webresources/com.pojo.student/";
+    private final static String StudentFacadeREST = "http://192.168.1.107:8080/Ass1/webresources/com.pojo.student/";
 
-    private static String SendGet(String url) {
+    public static String SendGet(String url) {
         // 定义一个字符串用来存储网页内容
         String result = "";
         // 定义一个缓冲字符输入流

@@ -19,7 +19,7 @@ import edu.monash.swan.ass2.Common.MD5Util;
 import edu.monash.swan.ass2.Common.RestClient;
 import edu.monash.swan.ass2.Common.Student;
 import edu.monash.swan.ass2.R;
-import edu.monash.swan.ass2.WeatherInfo.Const;
+import edu.monash.swan.ass2.Common.Const;
 
 public class LoginActivity extends Activity implements OnClickListener {
     private long exitTime = 0;

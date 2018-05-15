@@ -2,13 +2,9 @@ package edu.monash.swan.ass2.Activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,17 +12,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Display;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import edu.monash.swan.ass2.Common.MyImageView;
+import edu.monash.swan.ass2.Common.RestClient;
 import edu.monash.swan.ass2.R;
-import edu.monash.swan.ass2.WeatherInfo.Const;
-import edu.monash.swan.ass2.WeatherInfo.LocationUtils;
+import edu.monash.swan.ass2.WeatherInfo.Forecast;
+import edu.monash.swan.ass2.WeatherInfo.Weather;
+import edu.monash.swan.ass2.WeatherInfo.WeatherUtil;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -34,29 +35,42 @@ public class MainActivity extends AppCompatActivity
     private NavigationView left;
     private boolean isDrawer=false;
     private long exitTime = 0;
+
+    private MyImageView bingPicImg;
+    private ScrollView weatherLayout;
+    private TextView titleCity;
+    private TextView titleUpdateTime;
+    private TextView degreeText;
+    private TextView weatherInfoText;
+    private LinearLayout forecastLayout;
+    private TextView aqiText;
+    private TextView pm25Text;
+    private TextView comfortText;
+    private TextView carWashText;
+    private TextView sportText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.KITKAT) {
-            //透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //透明导航栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+
+        //初始化各控件
+        bingPicImg = findViewById(R.id.bing_pic_img);
+        loadBingPic();
+        weatherLayout = findViewById(R.id.weather_layout);
+        titleCity = findViewById(R.id.title_city);
+        titleUpdateTime = findViewById(R.id.title_update_time);
+        degreeText = findViewById(R.id.degree_text);
+        weatherInfoText = findViewById(R.id.weather_info_text);
+        forecastLayout = findViewById(R.id.forecast_layout);
+        aqiText = findViewById(R.id.aqi_text);
+        pm25Text = findViewById(R.id.pm25_text);
+        comfortText = findViewById(R.id.comfort_text);
+        carWashText = findViewById(R.id.car_wash_text);
+        sportText = findViewById(R.id.sport_text);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         right = findViewById(R.id.right);
@@ -99,39 +113,52 @@ public class MainActivity extends AppCompatActivity
             public void onDrawerStateChanged(int newState) {}
         });
 
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
-        View headerLayout = navigationView.getHeaderView(0);
-        TextView positionText = headerLayout.findViewById(R.id.position_text_view);
-        LocationUtils bdLocationUtils = new LocationUtils(MainActivity.this, positionText);
-        bdLocationUtils.doLocation();//开启定位
-
-        TextView textView = findViewById(R.id.tv_welcome);
-        textView.setText("Welcome " + Const.student.getFirstName());
+        Weather weather = WeatherUtil.requestWeather();
+        showWeatherInfo(weather);
     }
 
-/*    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main_drawer,menu);
-        return true;
+    /**
+     * 加载必应每日一图
+     */
+    private void loadBingPic() {
+        String requestBingPic = "http://guolin.tech/api/bing_pic";
+        bingPicImg.setImageURL(RestClient.SendGet(requestBingPic));
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.it_favoriteMovie:
-                Intent intent = new Intent(MainActivity.this, MovieActivity.class);
-                startActivity(intent);
-                break;
-            default:
-                break;
+    private void showWeatherInfo(Weather weather){
+        String cityName = weather.now.city;
+        String updateTime = weather.now.update.split(" ")[1];
+        String degree = weather.now.tmp + "℃";
+        String weatherInfo = weather.now.cond_txt;
+        titleCity.setText(cityName);
+        titleUpdateTime.setText(updateTime + "更新");
+        degreeText.setText(degree);
+        weatherInfoText.setText(weatherInfo);
+        forecastLayout.removeAllViews();
+        for(Forecast forecast : weather.forecastList){
+            View view = LayoutInflater.from(this).inflate(R.layout.forecast_item, forecastLayout, false);
+            TextView dateText = view.findViewById(R.id.date_text);
+            TextView infoText = view.findViewById(R.id.info_text);
+            TextView maxText = view.findViewById(R.id.max_text);
+            TextView minText = view.findViewById(R.id.min_text);
+            dateText.setText(forecast.date);
+            infoText.setText(forecast.cond_txt_d);
+            maxText.setText(forecast.max);
+            minText.setText(forecast.min);
+            forecastLayout.addView(view);
         }
-        return true;
-    }*/
-
-
+        if (weather.aqi != null) {
+            aqiText.setText(weather.aqi.aqi);
+            pm25Text.setText(weather.aqi.pm25);
+        }
+        String comfort = "舒适度：" + weather.suggestion.comf;
+        String carWash = "洗车指数：" + weather.suggestion.cw;
+        String sport = "运行建议：" + weather.suggestion.sport;
+        comfortText.setText(comfort);
+        carWashText.setText(carWash);
+        sportText.setText(sport);
+        weatherLayout.setVisibility(View.VISIBLE);
+    }
 
 
 
