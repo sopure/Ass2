@@ -146,6 +146,20 @@ public class SignupActivity extends AppCompatActivity implements DatePickerFragm
                     met_email.setError("email address is required!");
                     return;
                 }
+                if(RestClient.findByEmail(myId) != null){
+                    met_email.setError("email address has been registered");
+                    return;
+                }
+                String regex = "\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
+                if(!myId.matches(regex)){
+                    met_email.setError("please input correct email");
+                    return;
+                }
+                regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$";
+                if(!myPswd.matches(regex)){
+                    met_pswd.setError("password must contain both numbers and letters, and must be 8-16 digits in length!");
+                    return;
+                }
                 if (myPswd.isEmpty()) {
                     met_pswd.setError("password is required!");
                     return;
