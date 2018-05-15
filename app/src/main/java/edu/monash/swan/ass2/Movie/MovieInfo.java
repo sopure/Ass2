@@ -52,7 +52,7 @@ public class MovieInfo {
         try {
             jsonObject = new JSONObject(response);
             String year = jsonObject.getString("year");
-            String image = jsonObject.getJSONObject("images").getString("small");
+            String image = jsonObject.getJSONObject("images").getString("medium");
             String countries = "";
             JSONArray ja = jsonObject.getJSONArray("countries");
             for(int i = 0; i < ja.length(); i++){
