@@ -22,6 +22,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import edu.monash.swan.ass2.Common.Const;
 import edu.monash.swan.ass2.Common.MyImageView;
 import edu.monash.swan.ass2.Common.RestClient;
 import edu.monash.swan.ass2.R;
@@ -49,6 +50,10 @@ public class MainActivity extends AppCompatActivity
     private TextView carWashText;
     private TextView sportText;
 
+    private NavigationView navigationView;
+    private TextView positionText;
+    private TextView userText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +73,10 @@ public class MainActivity extends AppCompatActivity
         comfortText = findViewById(R.id.comfort_text);
         carWashText = findViewById(R.id.car_wash_text);
         sportText = findViewById(R.id.sport_text);
+
+        navigationView = findViewById(R.id.nav_view);
+        positionText = navigationView.getHeaderView(0).findViewById(R.id.position_text_view);
+        userText = navigationView.getHeaderView(0).findViewById(R.id.user);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -130,10 +139,13 @@ public class MainActivity extends AppCompatActivity
         String updateTime = weather.now.update.split(" ")[1];
         String degree = weather.now.tmp + "℃";
         String weatherInfo = weather.now.cond_txt;
+
         titleCity.setText(cityName);
         titleUpdateTime.setText(updateTime + "更新");
         degreeText.setText(degree);
+        positionText.setText(cityName + "\n" + degree);
         weatherInfoText.setText(weatherInfo);
+        userText.setText("Welcome " +  Const.student.getFirstName());
         forecastLayout.removeAllViews();
         for(Forecast forecast : weather.forecastList){
             View view = LayoutInflater.from(this).inflate(R.layout.forecast_item, forecastLayout, false);
