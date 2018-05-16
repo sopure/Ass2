@@ -2,6 +2,7 @@ package edu.monash.swan.ass2.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
@@ -17,14 +18,14 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import edu.monash.swan.ass2.Common.Const;
-import edu.monash.swan.ass2.Common.MyImageView;
-import edu.monash.swan.ass2.Common.RestClient;
+import edu.monash.swan.ass2.Common.NetworkUtil;
 import edu.monash.swan.ass2.R;
 import edu.monash.swan.ass2.WeatherInfo.Forecast;
 import edu.monash.swan.ass2.WeatherInfo.Weather;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity
     private boolean isDrawer=false;
     private long exitTime = 0;
 
-    private MyImageView bingPicImg;
+    private ImageView bingPicImg;
     private ScrollView weatherLayout;
     private TextView titleCity;
     private TextView titleUpdateTime;
@@ -61,7 +62,6 @@ public class MainActivity extends AppCompatActivity
 
         //初始化各控件
         bingPicImg = findViewById(R.id.bing_pic_img);
-        loadBingPic();
         weatherLayout = findViewById(R.id.weather_layout);
         titleCity = findViewById(R.id.title_city);
         titleUpdateTime = findViewById(R.id.title_update_time);
@@ -126,13 +126,6 @@ public class MainActivity extends AppCompatActivity
         showWeatherInfo(weather);
     }
 
-    /**
-     * 加载必应每日一图
-     */
-    private void loadBingPic() {
-        String requestBingPic = "http://guolin.tech/api/bing_pic";
-        bingPicImg.setImageURL(RestClient.SendGet(requestBingPic));
-    }
 
     private void showWeatherInfo(Weather weather){
         String cityName = weather.now.city;
@@ -164,11 +157,21 @@ public class MainActivity extends AppCompatActivity
             pm25Text.setText(weather.aqi.pm25);
         }
         String comfort = "舒适度：" + weather.suggestion.comf;
-        String carWash = "洗车指数：" + weather.suggestion.cw;
+        String carWash = "洗车指数：" + weather.suggestion.drsg;
         String sport = "运行建议：" + weather.suggestion.sport;
         comfortText.setText(comfort);
         carWashText.setText(carWash);
         sportText.setText(sport);
+
+        //图片资源
+        String requestBingPic = "http://guolin.tech/api/bing_pic";
+        String url = NetworkUtil.SendGet(requestBingPic);
+        //得到可用的图片
+        Bitmap bitmap = NetworkUtil.getHttpBitmap(url);
+        bingPicImg = this.findViewById(R.id.bing_pic_img);
+        //显示
+        bingPicImg.setImageBitmap(bitmap);
+
         weatherLayout.setVisibility(View.VISIBLE);
     }
 

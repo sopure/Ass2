@@ -1,10 +1,14 @@
 package edu.monash.swan.ass2.Common;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -12,7 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class RestClient {
+public class NetworkUtil {
     private final static String StudentFacadeREST = "http://192.168.1.107:8080/Ass1/webresources/com.pojo.student/";
 
     public static String SendGet(String url) {
@@ -90,7 +94,6 @@ public class RestClient {
         return student;
     }
     public static String Create(String entity){
-        System.out.println(entity);
         String surl = StudentFacadeREST + "createStu";
         HttpURLConnection httpURLConnection;
         String result = "";
@@ -138,5 +141,31 @@ public class RestClient {
             }
         }
         return result;
+    }
+    public static Bitmap getHttpBitmap(String url){
+        URL myFileURL;
+        Bitmap bitmap=null;
+        try{
+            myFileURL = new URL(url);
+            //获得连接
+            HttpURLConnection conn=(HttpURLConnection)myFileURL.openConnection();
+            //设置超时时间为6000毫秒，conn.setConnectionTiem(0);表示没有时间限制
+            conn.setConnectTimeout(6000);
+            //连接设置获得数据流
+            conn.setDoInput(true);
+            //不使用缓存
+            conn.setUseCaches(false);
+            //这句可有可无，没有影响
+            //conn.connect();
+            //得到数据流
+            InputStream is = conn.getInputStream();
+            //解析得到图片
+            bitmap = BitmapFactory.decodeStream(is);
+            //关闭数据流
+            is.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 }

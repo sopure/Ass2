@@ -4,7 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import edu.monash.swan.ass2.Common.Const;
-import edu.monash.swan.ass2.Common.RestClient;
+import edu.monash.swan.ass2.Common.NetworkUtil;
 
 public class MovieInfo {
     private String name;
@@ -32,7 +32,7 @@ public class MovieInfo {
         String name = Const.student.getFavouriteMovie();
         String url = "http://api.douban.com/v2/movie/search?q=" + name;
 
-        String response = RestClient.SendGet(url);
+        String response = NetworkUtil.SendGet(url);
         int total = 0;
         String id = "";
         JSONObject jsonObject;
@@ -48,7 +48,7 @@ public class MovieInfo {
             jsonObject = null;
         }
         url = "http://api.douban.com/v2/movie/subject/" + id;
-        response = RestClient.SendGet(url);
+        response = NetworkUtil.SendGet(url);
         try {
             jsonObject = new JSONObject(response);
             String year = jsonObject.getString("year");
@@ -80,6 +80,7 @@ public class MovieInfo {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Const.movieInfo = movieInfo;
         return movieInfo;
     }
 

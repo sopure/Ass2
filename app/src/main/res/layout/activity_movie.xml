@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-        <edu.monash.swan.ass2.Common.MyImageView
+        <ImageView
             android:id="@+id/mv_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -22,7 +22,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="电影名称"/>
+            android:text="电影名称："/>
         <TextView
             android:id="@+id/mv_name"
             android:layout_width="wrap_content"

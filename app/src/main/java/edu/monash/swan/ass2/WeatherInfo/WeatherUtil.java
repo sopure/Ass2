@@ -7,8 +7,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.monash.swan.ass2.Common.Const;
-import edu.monash.swan.ass2.Common.RestClient;
+import edu.monash.swan.ass2.Common.NetworkUtil;
 
 public class WeatherUtil {
 
@@ -16,8 +15,7 @@ public class WeatherUtil {
         String key = "87413bd9a5614b94b8f14729bf8d26ae";
         String url = "https://free-api.heweather.com/s6/weather/forecast?key=" + key + "&location=auto_ip";
         List<Forecast> forecastList = new ArrayList<>();
-        String result = RestClient.SendGet(url);
-        System.out.println(result);
+        String result = NetworkUtil.SendGet(url);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(result);
@@ -49,8 +47,7 @@ public class WeatherUtil {
         Now now = new Now();
         String key = "87413bd9a5614b94b8f14729bf8d26ae";
         String url = "https://free-api.heweather.com/s6/weather/now?key=" + key + "&location=auto_ip";
-        String result = RestClient.SendGet(url);
-        System.out.println(result);
+        String result = NetworkUtil.SendGet(url);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(result);
@@ -76,8 +73,7 @@ public class WeatherUtil {
         AQI aqi = null;
         String key = "87413bd9a5614b94b8f14729bf8d26ae";
         String url = "https://free-api.heweather.com/s6/air/now?key=" + key + "&location=auto_ip";
-        String result = RestClient.SendGet(url);
-        System.out.println(result);
+        String result = NetworkUtil.SendGet(url);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(result);
@@ -102,8 +98,7 @@ public class WeatherUtil {
         Suggestion suggestion = new Suggestion();
         String key = "87413bd9a5614b94b8f14729bf8d26ae";
         String url = "https://free-api.heweather.com/s6/weather/lifestyle?key=" + key + "&location=auto_ip";
-        String result = RestClient.SendGet(url);
-        System.out.println(result);
+        String result = NetworkUtil.SendGet(url);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(result);
@@ -114,7 +109,7 @@ public class WeatherUtil {
             try{
                 JSONArray ja = jsonObject.getJSONArray("HeWeather6").getJSONObject(0).getJSONArray("lifestyle");
                 suggestion.comf = ja.getJSONObject(0).getString("txt");
-                suggestion.cw = ja.getJSONObject(1).getString("txt");
+                suggestion.drsg = ja.getJSONObject(1).getString("txt");
                 suggestion.sport = ja.getJSONObject(4).getString("txt");
             }catch (Exception e) {
                 e.printStackTrace();

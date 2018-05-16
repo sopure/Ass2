@@ -19,7 +19,7 @@ import org.json.JSONObject;
 
 import edu.monash.swan.ass2.Common.DatePickerFragment;
 import edu.monash.swan.ass2.Common.MD5Util;
-import edu.monash.swan.ass2.Common.RestClient;
+import edu.monash.swan.ass2.Common.NetworkUtil;
 import edu.monash.swan.ass2.Common.Student;
 import edu.monash.swan.ass2.R;
 import edu.monash.swan.ass2.Common.Const;
@@ -142,57 +142,70 @@ public class SignupActivity extends AppCompatActivity implements DatePickerFragm
                 String nation = msp_nation.getSelectedItem().toString();
 
                 // Validate user input
+                boolean flag = true;
                 if (myId.isEmpty()) {
+                    met_email.requestFocus();
                     met_email.setError("email address is required!");
-                    return;
+                    flag = false;
                 }
-                if(RestClient.findByEmail(myId) != null){
+                if(NetworkUtil.findByEmail(myId) != null && flag){
+                    met_email.requestFocus();
                     met_email.setError("email address has been registered");
-                    return;
+                    flag = false;
                 }
-                String regex = "\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
-                if(!myId.matches(regex)){
+                String regex = "^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z0-9]+$";
+                if(!myId.matches(regex) && flag){
+                    met_email.requestFocus();
                     met_email.setError("please input correct email");
-                    return;
+                    flag = false;
+                }
+                if (myPswd.isEmpty() && flag) {
+                    met_pswd.requestFocus();
+                    met_pswd.setError("password is required!");
+                    flag = false;
                 }
                 regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$";
-                if(!myPswd.matches(regex)){
+                if(!myPswd.matches(regex) && flag){
+                    met_pswd.requestFocus();
                     met_pswd.setError("password must contain both numbers and letters, and must be 8-16 digits in length!");
-                    return;
+                    flag = false;
                 }
-                if (myPswd.isEmpty()) {
-                    met_pswd.setError("password is required!");
-                    return;
-                }
-                if (rePswd.isEmpty()) {
+                if (rePswd.isEmpty() && flag) {
+                    met_repswd.requestFocus();
                     met_repswd.setError("re-password is required!");
-                    return;
+                    flag = false;
                 }
-                if (firstNm.isEmpty()) {
-                    met_firstNm.setError("firstNm is required!");
-                    return;
-                }
-                if (surNm.isEmpty()) {
-                    met_surNm.setError("surtNm is required!");
-                    return;
-                }
-                if (!myPswd.equals(rePswd)) {
+                if (!myPswd.equals(rePswd) && flag) {
+                    met_repswd.requestFocus();
                     met_repswd.setError("Two different password input!");
-                    return;
+                    flag = false;
                 }
-                if (doB.equals("click to selectT00:00:00+08:00")) {
+                if (firstNm.isEmpty() && flag) {
+                    met_firstNm.requestFocus();
+                    met_firstNm.setError("firstNm is required!");
+                    flag = false;
+                }
+                if (surNm.isEmpty() && flag) {
+                    met_surNm.requestFocus();
+                    met_surNm.setError("surtNm is required!");
+                    flag = false;
+                }
+                if (doB.equals("click to selectT00:00:00+08:00") && flag) {
                     Toast.makeText(getApplicationContext(), "please input your birth!", Toast.LENGTH_SHORT).show();
-                    return;
+                    flag = false;
                 }
+                if(!flag)
+                    return;
                 myPswd = MD5Util.getMD5(myPswd);
                 Student stu = new Student(firstNm, surNm, doB, gender, course, studyMd, addr, suburb, nation, nativeLanguage, favoriteSpt, favoriteMv, favoriteUt, currentJb, myId, myPswd);
                 String student = stu.convert().toString();
-                String result = RestClient.Create(student);
+                String result = NetworkUtil.Create(student);
                 try{
                     JSONObject jsonObject = new JSONObject(result);
                     if(jsonObject.getInt("result") == 200){
                         stu.setId(stu.getEmail().hashCode());
                         Const.student = stu;
+                        LoginActivity.instance.finish();
                         Intent intent = new Intent(SignupActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();

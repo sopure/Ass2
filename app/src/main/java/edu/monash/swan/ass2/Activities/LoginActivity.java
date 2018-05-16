@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import edu.monash.swan.ass2.Common.MD5Util;
-import edu.monash.swan.ass2.Common.RestClient;
+import edu.monash.swan.ass2.Common.NetworkUtil;
 import edu.monash.swan.ass2.Common.Student;
 import edu.monash.swan.ass2.R;
 import edu.monash.swan.ass2.Common.Const;
@@ -28,10 +28,12 @@ public class LoginActivity extends Activity implements OnClickListener {
     private View progress;
     private View mInputLayout;
     private LinearLayout mName, mPsw;
+    public static LoginActivity instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instance = this;
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.KITKAT) {
             //透明状态栏
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -83,7 +85,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     private boolean verification(){
         String username = mUsername.getText().toString();
         String password = mPassword.getText().toString();
-        Student student = RestClient.findByEmail(username);
+        Student student = NetworkUtil.findByEmail(username);
         if(student != null && MD5Util.getMD5(password).equals(student.getPassword())){
             Const.student = student;
             return true;
