@@ -203,11 +203,6 @@ public class SignupActivity extends AppCompatActivity implements DatePickerFragm
                 try{
                     JSONObject jsonObject = new JSONObject(result);
                     if(jsonObject.getInt("result") == 200){
-                        stu.setId(stu.getEmail().hashCode());
-                        Const.student = stu;
-                        LoginActivity.instance.finish();
-                        Intent intent = new Intent(SignupActivity.this, MainActivity.class);
-                        startActivity(intent);
                         finish();
                     }else {
                         Toast.makeText(getApplicationContext(), "Registration Failed", Toast.LENGTH_SHORT).show();

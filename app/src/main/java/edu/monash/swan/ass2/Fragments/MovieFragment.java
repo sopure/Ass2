@@ -1,19 +1,30 @@
-package edu.monash.swan.ass2.Activities;
+package edu.monash.swan.ass2.Fragments;
+
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 import edu.monash.swan.ass2.Common.Const;
 import edu.monash.swan.ass2.Common.NetworkUtil;
 import edu.monash.swan.ass2.Movie.MovieInfo;
 import edu.monash.swan.ass2.R;
 
-public class MovieActivity extends AppCompatActivity {
-
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class MovieFragment extends Fragment {
+    private  View view;
     private ImageView mv_image;
     private TextView mv_year;
     private TextView mv_countries;
@@ -25,10 +36,16 @@ public class MovieActivity extends AppCompatActivity {
     private MovieInfo movieInfo;
     private MyTask mTask;
 
+    public MovieFragment() {
+        // Required empty public constructor
+    }
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        view = inflater.inflate(R.layout.fragment_movie, container, false);
         initialize();
         if(Const.movieInfo != null && Const.movieInfo.getName().equals(Const.student.getFavouriteMovie())){
             movieInfo = Const.movieInfo;
@@ -37,17 +54,18 @@ public class MovieActivity extends AppCompatActivity {
             mTask = new MyTask();
             mTask.execute("");
         }
+        return view;
     }
 
     private void initialize(){
-        mv_image = findViewById(R.id.mv_image);
-        mv_name = findViewById(R.id.mv_name);
-        mv_year = findViewById(R.id.mv_year);
-        mv_countries = findViewById(R.id.mv_countries);
-        mv_genres = findViewById(R.id.mv_genres);
-        mv_summary = findViewById(R.id.mv_summary);
-        mv_directors = findViewById(R.id.mv_directors);
-        mv_casts = findViewById(R.id.mv_casts);
+        mv_image = view.findViewById(R.id.mv_image);
+        mv_name = view.findViewById(R.id.mv_name);
+        mv_year = view.findViewById(R.id.mv_year);
+        mv_countries = view.findViewById(R.id.mv_countries);
+        mv_genres = view.findViewById(R.id.mv_genres);
+        mv_summary = view.findViewById(R.id.mv_summary);
+        mv_directors = view.findViewById(R.id.mv_directors);
+        mv_casts = view.findViewById(R.id.mv_casts);
     }
 
     private void showMovieInfo(){
@@ -75,6 +93,7 @@ public class MovieActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             movieInfo = MovieInfo.getMoive();
+            Const.movieInfo = movieInfo;
             return null;
         }
 
@@ -93,7 +112,6 @@ public class MovieActivity extends AppCompatActivity {
         //onCancelled方法用于在取消执行中的任务时更改UI
         @Override
         protected void onCancelled() {
-
         }
     }
 

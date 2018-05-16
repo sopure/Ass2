@@ -20,6 +20,7 @@ import edu.monash.swan.ass2.Common.NetworkUtil;
 import edu.monash.swan.ass2.Common.Student;
 import edu.monash.swan.ass2.R;
 import edu.monash.swan.ass2.Common.Const;
+import edu.monash.swan.ass2.WeatherInfo.WeatherUtil;
 
 public class LoginActivity extends Activity implements OnClickListener {
     private long exitTime = 0;
@@ -47,7 +48,18 @@ public class LoginActivity extends Activity implements OnClickListener {
         }
         setContentView(R.layout.activity_login);
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Const.weather = WeatherUtil.requestWeather();
+                //图片资源
+                String requestBingPic = "http://guolin.tech/api/bing_pic";
+                Const.bingPicUrl = NetworkUtil.SendGet(requestBingPic);
+            }
+        }).start();
+
         initView();
+
     }
 
     private void initView() {

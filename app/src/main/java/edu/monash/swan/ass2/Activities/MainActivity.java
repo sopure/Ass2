@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -26,6 +28,9 @@ import android.widget.Toast;
 
 import edu.monash.swan.ass2.Common.Const;
 import edu.monash.swan.ass2.Common.NetworkUtil;
+import edu.monash.swan.ass2.Fragments.MovieFragment;
+import edu.monash.swan.ass2.Fragments.WeatherFragment;
+import edu.monash.swan.ass2.Movie.MovieInfo;
 import edu.monash.swan.ass2.R;
 import edu.monash.swan.ass2.WeatherInfo.Forecast;
 import edu.monash.swan.ass2.WeatherInfo.Weather;
@@ -38,21 +43,10 @@ public class MainActivity extends AppCompatActivity
     private boolean isDrawer=false;
     private long exitTime = 0;
 
-    private ImageView bingPicImg;
-    private ScrollView weatherLayout;
-    private TextView titleCity;
-    private TextView titleUpdateTime;
-    private TextView degreeText;
-    private TextView weatherInfoText;
-    private LinearLayout forecastLayout;
-    private TextView aqiText;
-    private TextView pm25Text;
-    private TextView comfortText;
-    private TextView carWashText;
-    private TextView sportText;
+    private FragmentManager FM;
 
     private NavigationView navigationView;
-    private TextView positionText;
+
     private TextView userText;
 
     @Override
@@ -61,22 +55,11 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         //初始化各控件
-        bingPicImg = findViewById(R.id.bing_pic_img);
-        weatherLayout = findViewById(R.id.weather_layout);
-        titleCity = findViewById(R.id.title_city);
-        titleUpdateTime = findViewById(R.id.title_update_time);
-        degreeText = findViewById(R.id.degree_text);
-        weatherInfoText = findViewById(R.id.weather_info_text);
-        forecastLayout = findViewById(R.id.forecast_layout);
-        aqiText = findViewById(R.id.aqi_text);
-        pm25Text = findViewById(R.id.pm25_text);
-        comfortText = findViewById(R.id.comfort_text);
-        carWashText = findViewById(R.id.car_wash_text);
-        sportText = findViewById(R.id.sport_text);
 
         navigationView = findViewById(R.id.nav_view);
-        positionText = navigationView.getHeaderView(0).findViewById(R.id.position_text_view);
         userText = navigationView.getHeaderView(0).findViewById(R.id.user);
+
+        userText.setText("Welcome " + Const.student.getFirstName());
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -122,60 +105,32 @@ public class MainActivity extends AppCompatActivity
             public void onDrawerStateChanged(int newState) {}
         });
 
-        Weather weather = WeatherUtil.requestWeather();
-        showWeatherInfo(weather);
+        //获取到FragmentManager，在V4包中通过getSupportFragmentManager，
+        //在系统中原生的Fragment是通过getFragmentManager获得的。
+        FM = getSupportFragmentManager();
+        //2.开启一个事务，通过调用beginTransaction方法开启。
+        FragmentTransaction mFragmentTransaction =FM.beginTransaction();
+
+        if(Const.weatherFragment != null){
+            mFragmentTransaction.replace(R.id.content_main, Const.weatherFragment);
+        }else {
+            WeatherFragment weatherFragment  = new WeatherFragment();
+            Const.weatherFragment = weatherFragment;
+            mFragmentTransaction.replace(R.id.content_main, weatherFragment);
+        }
+        mFragmentTransaction.commit();
+        ini();
     }
 
 
-    private void showWeatherInfo(Weather weather){
-        String cityName = weather.now.city;
-        String updateTime = weather.now.update.split(" ")[1];
-        String degree = weather.now.tmp + "℃";
-        String weatherInfo = weather.now.cond_txt;
-
-        titleCity.setText(cityName);
-        titleUpdateTime.setText(updateTime + "更新");
-        degreeText.setText(degree);
-        positionText.setText(cityName + "\n" + degree);
-        weatherInfoText.setText(weatherInfo);
-        userText.setText("Welcome " +  Const.student.getFirstName());
-        forecastLayout.removeAllViews();
-        for(Forecast forecast : weather.forecastList){
-            View view = LayoutInflater.from(this).inflate(R.layout.forecast_item, forecastLayout, false);
-            TextView dateText = view.findViewById(R.id.date_text);
-            TextView infoText = view.findViewById(R.id.info_text);
-            TextView maxText = view.findViewById(R.id.max_text);
-            TextView minText = view.findViewById(R.id.min_text);
-            dateText.setText(forecast.date);
-            infoText.setText(forecast.cond_txt_d);
-            maxText.setText(forecast.max);
-            minText.setText(forecast.min);
-            forecastLayout.addView(view);
-        }
-        if (weather.aqi != null) {
-            aqiText.setText(weather.aqi.aqi);
-            pm25Text.setText(weather.aqi.pm25);
-        }
-        String comfort = "舒适度：" + weather.suggestion.comf;
-        String carWash = "洗车指数：" + weather.suggestion.drsg;
-        String sport = "运行建议：" + weather.suggestion.sport;
-        comfortText.setText(comfort);
-        carWashText.setText(carWash);
-        sportText.setText(sport);
-
-        //图片资源
-        String requestBingPic = "http://guolin.tech/api/bing_pic";
-        String url = NetworkUtil.SendGet(requestBingPic);
-        //得到可用的图片
-        Bitmap bitmap = NetworkUtil.getHttpBitmap(url);
-        bingPicImg = this.findViewById(R.id.bing_pic_img);
-        //显示
-        bingPicImg.setImageBitmap(bitmap);
-
-        weatherLayout.setVisibility(View.VISIBLE);
+    public void ini(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Const.movieInfo = MovieInfo.getMoive();
+            }
+        }).start();
     }
-
-
 
     @Override
     public void onBackPressed() {
@@ -191,19 +146,31 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        FragmentTransaction mFragmentTransaction =FM.beginTransaction();
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
+        if (id == R.id.nav_home) {
+            if(Const.weatherFragment != null){
+                mFragmentTransaction.replace(R.id.content_main, Const.weatherFragment);
+            }else{
+                WeatherFragment weatherFragment  = new WeatherFragment();
+                Const.weatherFragment = weatherFragment;
+                mFragmentTransaction.replace(R.id.content_main, weatherFragment);
+            }
         } else if (id == R.id.nav_locationReport) {
 
         } else if (id == R.id.it_favoriteMovie) {
-            Intent intent = new Intent(MainActivity.this, MovieActivity.class);
-            startActivity(intent);
+            /*Intent intent = new Intent(MainActivity.this, MovieActivity.class);
+            startActivity(intent);*/
+            //向容器内加入Fragment，一般使用add或者replace方法实现，需要传入容器的id和Fragment的实例。
+            //把自己创建好的fragment创建一个对象
+            MovieFragment movieFragment  = new MovieFragment();
+            mFragmentTransaction.replace(R.id.content_main, movieFragment);
         } else if (id == R.id.profile) {
 
         }
+        mFragmentTransaction.commit();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
