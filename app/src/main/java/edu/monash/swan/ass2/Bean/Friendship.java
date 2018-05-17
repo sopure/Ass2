@@ -1,4 +1,4 @@
-package edu.monash.swan.ass2.Common;
+package edu.monash.swan.ass2.Bean;
 
 /**
  * Created by owliz on 2017/5/10.

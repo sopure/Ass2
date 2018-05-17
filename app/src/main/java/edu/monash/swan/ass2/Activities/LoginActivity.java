@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import edu.monash.swan.ass2.Common.MD5Util;
 import edu.monash.swan.ass2.Common.NetworkUtil;
-import edu.monash.swan.ass2.Common.Student;
+import edu.monash.swan.ass2.Bean.Student;
 import edu.monash.swan.ass2.R;
 import edu.monash.swan.ass2.Common.Const;
 import edu.monash.swan.ass2.WeatherInfo.WeatherUtil;
@@ -55,6 +55,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                 //图片资源
                 String requestBingPic = "http://guolin.tech/api/bing_pic";
                 Const.bingPicUrl = NetworkUtil.SendGet(requestBingPic);
+                Const.weatherBitmap = NetworkUtil.getHttpBitmap(Const.bingPicUrl);
             }
         }).start();
 

@@ -60,7 +60,6 @@ public class WeatherUtil {
                 JSONObject js = ja.getJSONObject(0).getJSONObject("now");
                 now.cond_txt = js.getString("cond_txt");
                 now.tmp = js.getString("tmp");
-                now.update = ja.getJSONObject(0).getJSONObject("update").getString("loc");
                 now.city = ja.getJSONObject(0).getJSONObject("basic").getString("location");
             }catch (Exception e) {
                 e.printStackTrace();

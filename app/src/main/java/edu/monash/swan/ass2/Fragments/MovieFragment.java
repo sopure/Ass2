@@ -2,6 +2,7 @@ package edu.monash.swan.ass2.Fragments;
 
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import net.qiujuer.genius.blur.StackBlur;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -26,6 +29,7 @@ import edu.monash.swan.ass2.R;
 public class MovieFragment extends Fragment {
     private  View view;
     private ImageView mv_image;
+    private TextView mv_duration;
     private TextView mv_year;
     private TextView mv_countries;
     private TextView mv_genres;
@@ -62,6 +66,7 @@ public class MovieFragment extends Fragment {
         mv_name = view.findViewById(R.id.mv_name);
         mv_year = view.findViewById(R.id.mv_year);
         mv_countries = view.findViewById(R.id.mv_countries);
+        mv_duration = view.findViewById(R.id.mv_duration);
         mv_genres = view.findViewById(R.id.mv_genres);
         mv_summary = view.findViewById(R.id.mv_summary);
         mv_directors = view.findViewById(R.id.mv_directors);
@@ -70,16 +75,20 @@ public class MovieFragment extends Fragment {
 
     private void showMovieInfo(){
         mv_name.setText(movieInfo.getName());
-        mv_year.setText(movieInfo.getYear());
+        mv_year.setText(movieInfo.getReleaseDate()+"上映");
         mv_countries.setText(movieInfo.getCountries());
-        mv_casts.setText(movieInfo.getCasts());
+        mv_duration.setText(movieInfo.getRunTime());
+        mv_casts.setText(movieInfo.getActors());
         mv_genres.setText(movieInfo.getGenres());
         mv_summary.setText(movieInfo.getSummary());
         mv_directors.setText(movieInfo.getDirectors());
-        //得到可用的图片
-        Bitmap bitmap = NetworkUtil.getHttpBitmap(movieInfo.getImage());
+
+        if(Const.movieBitmap == null){
+            Const.movieBitmap = NetworkUtil.getHttpBitmap(Const.movieInfo.getPoster());
+        }
         //显示
-        mv_image.setImageBitmap(bitmap);
+        view.findViewById(R.id.mv_cover_bg).setBackground(new BitmapDrawable(StackBlur.blur(Const.movieBitmap, 60, false)));
+        mv_image.setImageBitmap(Const.movieBitmap);
     }
 
     private class MyTask extends AsyncTask<String, Integer, String> {
@@ -94,6 +103,7 @@ public class MovieFragment extends Fragment {
         protected String doInBackground(String... params) {
             movieInfo = MovieInfo.getMoive();
             Const.movieInfo = movieInfo;
+            Const.movieBitmap = NetworkUtil.getHttpBitmap(Const.movieInfo.getPoster());
             return null;
         }
 

@@ -1,7 +1,6 @@
 package edu.monash.swan.ass2.Activities;
 
 import android.app.DialogFragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -20,9 +19,8 @@ import org.json.JSONObject;
 import edu.monash.swan.ass2.Common.DatePickerFragment;
 import edu.monash.swan.ass2.Common.MD5Util;
 import edu.monash.swan.ass2.Common.NetworkUtil;
-import edu.monash.swan.ass2.Common.Student;
+import edu.monash.swan.ass2.Bean.Student;
 import edu.monash.swan.ass2.R;
-import edu.monash.swan.ass2.Common.Const;
 
 // implement interface[DatePickerFragment.OnDateSetListener] declared in fragment
 public class SignupActivity extends AppCompatActivity implements DatePickerFragment.OnDateSetListener {

@@ -1,6 +1,5 @@
 package edu.monash.swan.ass2.Movie;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import edu.monash.swan.ass2.Common.Const;
@@ -9,74 +8,47 @@ import edu.monash.swan.ass2.Common.NetworkUtil;
 public class MovieInfo {
     private String name;
     private String genres;
-    private String year;
-    private String image;
+    private String releaseDate;
+    private String poster;
     private String countries;
-    private String casts;
+    private String actors;
     private String summary;
     private String directors;
+    private String runTime;
 
-    public MovieInfo(String name, String year, String genres, String image, String countries, String casts, String summary, String directors) {
+    public MovieInfo(String name, String releaseDate, String genres, String poster, String countries, String actors, String summary, String directors, String runTime) {
         this.name = name;
-        this.year = year;
+        this.releaseDate = releaseDate;
         this.genres = genres;
-        this.image = image;
+        this.poster = poster;
         this.countries = countries;
-        this.casts = casts;
+        this.actors = actors;
         this.summary = summary;
         this.directors = directors;
+        this.runTime = runTime;
     }
 
     public static MovieInfo getMoive(){
-        MovieInfo movieInfo = null;
         String name = Const.student.getFavouriteMovie();
-        String url = "http://api.douban.com/v2/movie/search?q=" + name;
-
+        String url = "http://v.juhe.cn/movie/index?key=14eaa1ae73563d091377956d4a08270b&title="+name;
+        MovieInfo movieInfo = null;
         String response = NetworkUtil.SendGet(url);
-        int total = 0;
-        String id = "";
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
-            total = jsonObject.getInt("total");
-            if(total == 0) return movieInfo;
-            JSONArray ja = new JSONArray(jsonObject.get("subjects").toString());
-            JSONObject js = (JSONObject) ja.get(0);
-            id = js.getString("id");
+            jsonObject = (JSONObject) jsonObject.getJSONArray("result").get(0);
+            String genres = jsonObject.getString("genres");
+            String runTime = jsonObject.getString("runtime");
+            String poster = jsonObject.getString("poster");
+            String directors = jsonObject.getString("directors");
+            String actors = jsonObject.getString("actors");
+            actors = actors.replaceAll("[a-zA-Z]","" ).replace(",", "");
+            String summary = jsonObject.getString("plot_simple");
+            String countries = jsonObject.getString("country");
+            StringBuilder sb = new StringBuilder(jsonObject.getString("release_date")).insert(4, '/').insert(7, '/');
+            String releaseDate = sb.toString();
 
-        } catch (Exception e) {
-            jsonObject = null;
-        }
-        url = "http://api.douban.com/v2/movie/subject/" + id;
-        response = NetworkUtil.SendGet(url);
-        try {
-            jsonObject = new JSONObject(response);
-            String year = jsonObject.getString("year");
-            String image = jsonObject.getJSONObject("images").getString("medium");
-            String countries = "";
-            JSONArray ja = jsonObject.getJSONArray("countries");
-            for(int i = 0; i < ja.length(); i++){
-                countries += ja.getString(i)+" ";
-            }
-            String genres = "";
-            ja = jsonObject.getJSONArray("genres");
-            for(int i = 0; i < ja.length(); i++){
-                genres += ja.getString(i)+" ";
-            }
-            String casts = "";
-            ja = jsonObject.getJSONArray("casts");
-            for(int i = 0; i < ja.length(); i++){
-                JSONObject js = ja.getJSONObject(i);
-                casts += js.getString("name") + " ";
-            }
-            String summary = jsonObject.getString("summary");
-            String directors = "";
-            ja = jsonObject.getJSONArray("directors");
-            for(int i = 0; i < ja.length(); i++){
-                JSONObject js = ja.getJSONObject(i);
-                directors += js.getString("name") + " ";
-            }
-            movieInfo = new MovieInfo(name, year, genres, image, countries, casts, summary, directors);
+            movieInfo = new MovieInfo(name, releaseDate, genres, poster, countries, actors, summary, directors, runTime);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -84,10 +56,13 @@ public class MovieInfo {
         return movieInfo;
     }
 
+    public String getName() {
+        return name;
+    }
 
-
-
-
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getGenres() {
         return genres;
@@ -97,12 +72,20 @@ public class MovieInfo {
         this.genres = genres;
     }
 
-    public String getImage() {
-        return image;
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public String getPoster() {
+        return poster;
+    }
+
+    public void setPoster(String poster) {
+        this.poster = poster;
     }
 
     public String getCountries() {
@@ -113,12 +96,12 @@ public class MovieInfo {
         this.countries = countries;
     }
 
-    public String getCasts() {
-        return casts;
+    public String getActors() {
+        return actors;
     }
 
-    public void setCasts(String casts) {
-        this.casts = casts;
+    public void setActors(String actors) {
+        this.actors = actors;
     }
 
     public String getSummary() {
@@ -137,19 +120,11 @@ public class MovieInfo {
         this.directors = directors;
     }
 
-    public String getYear() {
-        return year;
+    public String getRunTime() {
+        return runTime;
     }
 
-    public void setYear(String year) {
-        this.year = year;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setRunTime(String runTime) {
+        this.runTime = runTime;
     }
 }

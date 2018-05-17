@@ -1,4 +1,4 @@
-package edu.monash.swan.ass2.Common;
+package edu.monash.swan.ass2.Bean;
 
 public class FriendshipPK {
 

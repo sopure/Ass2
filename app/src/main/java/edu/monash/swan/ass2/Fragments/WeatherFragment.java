@@ -3,6 +3,8 @@ package edu.monash.swan.ass2.Fragments;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import edu.monash.swan.ass2.Common.Const;
 import edu.monash.swan.ass2.Common.NetworkUtil;
@@ -26,9 +31,9 @@ public class WeatherFragment extends Fragment {
     private View view;
 
     private ImageView bingPicImg;
-    private ScrollView weatherLayout;
+
     private TextView titleCity;
-    private TextView titleUpdateTime;
+    private TextView titleTime;
     private TextView degreeText;
     private TextView weatherInfoText;
     private LinearLayout forecastLayout;
@@ -37,6 +42,8 @@ public class WeatherFragment extends Fragment {
     private TextView comfortText;
     private TextView carWashText;
     private TextView sportText;
+
+    private Handler mHandler;
 
     public WeatherFragment() {
         // Required empty public constructor
@@ -50,9 +57,9 @@ public class WeatherFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_weather, container, false);
         //初始化各控件
         bingPicImg = view.findViewById(R.id.bing_pic_img);
-        weatherLayout = view.findViewById(R.id.weather_layout);
+
         titleCity = view.findViewById(R.id.title_city);
-        titleUpdateTime = view.findViewById(R.id.title_update_time);
+        titleTime = view.findViewById(R.id.title_time);
         degreeText = view.findViewById(R.id.degree_text);
         weatherInfoText = view.findViewById(R.id.weather_info_text);
         forecastLayout = view.findViewById(R.id.forecast_layout);
@@ -61,6 +68,26 @@ public class WeatherFragment extends Fragment {
         comfortText = view.findViewById(R.id.comfort_text);
         carWashText = view.findViewById(R.id.car_wash_text);
         sportText = view.findViewById(R.id.sport_text);
+
+        mHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what) {
+                    case 1:
+                        long time = System.currentTimeMillis();
+                        Date date = new Date(time);
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        String data = format.format(date);
+                        titleTime.setText(data); //更新时间
+                        break;
+                    default:
+                        break;
+
+                }
+            }
+        };
+        new TimeThread().start();
 
         if(Const.weather == null){
             Weather weather = WeatherUtil.requestWeather();
@@ -72,13 +99,14 @@ public class WeatherFragment extends Fragment {
     }
 
     private void showWeatherInfo(Weather weather){
+
         String cityName = weather.now.city;
-        String updateTime = weather.now.update.split(" ")[1];
+
         String degree = weather.now.tmp + "℃";
         String weatherInfo = weather.now.cond_txt;
 
         titleCity.setText(cityName);
-        titleUpdateTime.setText(updateTime + "更新");
+
         degreeText.setText(degree);
 
         weatherInfoText.setText(weatherInfo);
@@ -113,15 +141,27 @@ public class WeatherFragment extends Fragment {
             Const.bingPicUrl = NetworkUtil.SendGet(requestBingPic);
         }
 
-        if(Const.bitmap == null){
-            Const.bitmap = NetworkUtil.getHttpBitmap(Const.bingPicUrl);
+        if(Const.weatherBitmap == null){
+            Const.weatherBitmap = NetworkUtil.getHttpBitmap(Const.bingPicUrl);
         }
-        //得到可用的图片
-        bingPicImg = view.findViewById(R.id.bing_pic_img);
         //显示
-        bingPicImg.setImageBitmap(Const.bitmap);
+        bingPicImg.setImageBitmap(Const.weatherBitmap);
+    }
 
-        weatherLayout.setVisibility(View.VISIBLE);
+    class TimeThread extends Thread {
+        @Override
+        public void run() {
+            do {
+                try {
+                    Thread.sleep(1000);
+                    Message msg = new Message();
+                    msg.what = 1;  //消息(一个整型值)
+                    mHandler.sendMessage(msg);// 每隔1秒发送一个msg给mHandler
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } while (true);
+        }
     }
 
 }

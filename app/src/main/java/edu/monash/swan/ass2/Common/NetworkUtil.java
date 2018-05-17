@@ -10,11 +10,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+
+import edu.monash.swan.ass2.Bean.Student;
 
 public class NetworkUtil {
     private final static String StudentFacadeREST = "http://192.168.1.107:8080/Ass1/webresources/com.pojo.student/";

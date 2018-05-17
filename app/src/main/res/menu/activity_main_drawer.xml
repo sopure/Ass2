@@ -7,10 +7,10 @@
             android:title="Home" />
         <item
             android:id="@+id/profile"
-            android:title="Your Profile" />
+            android:title="My Profile" />
         <item
             android:id="@+id/Friends"
-            android:title="Your Friends" />
+            android:title="My Friends" />
         <item
             android:id="@+id/it_favoriteMovie"
             android:title="FavoriteMovie" />

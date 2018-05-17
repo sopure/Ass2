@@ -1,8 +1,6 @@
 package edu.monash.swan.ass2.Activities;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
@@ -15,14 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Display;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,9 +26,6 @@ import edu.monash.swan.ass2.Fragments.MovieFragment;
 import edu.monash.swan.ass2.Fragments.WeatherFragment;
 import edu.monash.swan.ass2.Movie.MovieInfo;
 import edu.monash.swan.ass2.R;
-import edu.monash.swan.ass2.WeatherInfo.Forecast;
-import edu.monash.swan.ass2.WeatherInfo.Weather;
-import edu.monash.swan.ass2.WeatherInfo.WeatherUtil;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -128,6 +119,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void run() {
                 Const.movieInfo = MovieInfo.getMoive();
+                Const.movieBitmap = NetworkUtil.getHttpBitmap(Const.movieInfo.getPoster());
             }
         }).start();
     }
