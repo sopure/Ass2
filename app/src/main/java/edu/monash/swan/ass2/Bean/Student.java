@@ -3,8 +3,8 @@ package edu.monash.swan.ass2.Bean;
 import org.json.JSONObject;
 
 public class Student{
-    private static Integer sid = 1000;
-    private Integer id;
+
+    private Integer sid;
     private String firstName;
     private String surname;
     private String dob;
@@ -23,7 +23,27 @@ public class Student{
     private String password;
 
     public Student(String firstName, String surname, String dob, String gender, String course, String studyMode, String address, String suburb, String nationality, String language, String favouriteSport, String favouriteMovie, String favouriteUnit, String currentJob, String email, String password) {
-        id = ++sid;
+
+        this.firstName = firstName;
+        this.surname = surname;
+        this.dob = dob;
+        this.gender = gender;
+        this.course = course;
+        this.studyMode = studyMode;
+        this.address = address;
+        this.suburb = suburb;
+        this.nationality = nationality;
+        this.language = language;
+        this.favouriteSport = favouriteSport;
+        this.favouriteMovie = favouriteMovie;
+        this.favouriteUnit = favouriteUnit;
+        this.currentJob = currentJob;
+        this.email = email;
+        this.password = password;
+    }
+
+    public Student(String sid, String firstName, String surname, String dob, String gender, String course, String studyMode, String address, String suburb, String nationality, String language, String favouriteSport, String favouriteMovie, String favouriteUnit, String currentJob, String email, String password) {
+        this.sid = Integer.parseInt(sid);
         this.firstName = firstName;
         this.surname = surname;
         this.dob = dob;
@@ -45,6 +65,7 @@ public class Student{
     public JSONObject convert(){
         JSONObject jsonObject = new JSONObject();
         try {
+            jsonObject.put("sid", this.sid);
             jsonObject.put("firstName", this.firstName);
             jsonObject.put("surname", this.surname);
             jsonObject.put("dob", this.dob);
@@ -197,10 +218,11 @@ public class Student{
     }
 
     public Integer getId() {
-        return id;
+        return sid;
     }
 
     public void setId(Integer id) {
-        this.id = id;
+        this.sid = id;
     }
+
 }

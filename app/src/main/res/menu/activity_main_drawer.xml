@@ -17,6 +17,10 @@
         <item
             android:id="@+id/nav_locationReport"
             android:title="Location Report" />
+
+        <item
+            android:id="@+id/add_newFriend"
+            android:title="Add New Friends" />
     </group>
 
 

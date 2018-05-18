@@ -22,7 +22,10 @@ import android.widget.Toast;
 
 import edu.monash.swan.ass2.Common.Const;
 import edu.monash.swan.ass2.Common.NetworkUtil;
+import edu.monash.swan.ass2.Fragments.FindNewfragment;
+import edu.monash.swan.ass2.Fragments.FriendsFragment;
 import edu.monash.swan.ass2.Fragments.MovieFragment;
+import edu.monash.swan.ass2.Fragments.ProfileFragment;
 import edu.monash.swan.ass2.Fragments.WeatherFragment;
 import edu.monash.swan.ass2.Movie.MovieInfo;
 import edu.monash.swan.ass2.R;
@@ -109,8 +112,8 @@ public class MainActivity extends AppCompatActivity
             Const.weatherFragment = weatherFragment;
             mFragmentTransaction.replace(R.id.content_main, weatherFragment);
         }
-        mFragmentTransaction.commit();
         ini();
+        mFragmentTransaction.commit();
     }
 
 
@@ -118,7 +121,7 @@ public class MainActivity extends AppCompatActivity
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Const.movieInfo = MovieInfo.getMoive();
+                Const.movieInfo = MovieInfo.getMoive(Const.student.getFavouriteMovie());
                 Const.movieBitmap = NetworkUtil.getHttpBitmap(Const.movieInfo.getPoster());
             }
         }).start();
@@ -157,10 +160,17 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);*/
             //向容器内加入Fragment，一般使用add或者replace方法实现，需要传入容器的id和Fragment的实例。
             //把自己创建好的fragment创建一个对象
-            MovieFragment movieFragment  = new MovieFragment();
+            MovieFragment movieFragment  = MovieFragment.newInstance(Const.student.getFavouriteMovie());
             mFragmentTransaction.replace(R.id.content_main, movieFragment);
         } else if (id == R.id.profile) {
-
+            ProfileFragment profileFragment = new ProfileFragment();
+            mFragmentTransaction.replace(R.id.content_main, profileFragment);
+        } else if (id == R.id.Friends){
+            FriendsFragment friendsFragment = new FriendsFragment();
+            mFragmentTransaction.replace(R.id.content_main, friendsFragment);
+        } else if (id == R.id.add_newFriend){
+            FindNewfragment findNewFragment = new FindNewfragment();
+            mFragmentTransaction.replace(R.id.content_main, findNewFragment);
         }
         mFragmentTransaction.commit();
 

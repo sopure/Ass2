@@ -28,8 +28,7 @@ public class MovieInfo {
         this.runTime = runTime;
     }
 
-    public static MovieInfo getMoive(){
-        String name = Const.student.getFavouriteMovie();
+    public static MovieInfo getMoive(String name){
         String url = "http://v.juhe.cn/movie/index?key=14eaa1ae73563d091377956d4a08270b&title="+name;
         MovieInfo movieInfo = null;
         String response = NetworkUtil.SendGet(url);

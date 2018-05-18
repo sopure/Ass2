@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="40dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:weightSum="1">
+
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="INDIVIDUAL PROFLIE"
+        android:textColor="@color/dodgerblue"
+        android:textSize="30sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tv2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="modify as you wish"
+        android:textColor="@color/dodgerblue"
+        android:textSize="15sp"
+        android:padding="10dp"
+        />
+
+    <LinearLayout
+        android:padding="5dp"
+        android:layout_width="338dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:text="Email:"
+            />
+
+        <EditText
+            android:id="@+id/et_email"
+            android:layout_width="266dp"
+            android:layout_height="wrap_content"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="338dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/tv_newPswd"
+            android:layout_width="72dp"
+            android:layout_height="30dp"
+            android:text="Password:"
+            />
+
+        <EditText
+            android:id="@+id/et_newPswd"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:hint="input to modify"
+            android:textColorHint="@color/thistle"
+            android:ems="10"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:padding="5dp"
+        android:layout_width="338dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_firstNm"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:text="FirstName:"/>
+
+        <EditText
+            android:id="@+id/et_firstNm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="6.50"
+            android:ems="10"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:padding="5dp"
+        android:layout_width="338dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_surNm"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:text="SurName:"
+            />
+
+        <EditText
+            android:id="@+id/et_surNm"
+            android:layout_width="266dp"
+            android:layout_height="wrap_content"
+            android:ems="10"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.08"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/tv_course"
+            android:layout_width="72dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="Course:"/>
+
+        <Spinner
+            android:id="@+id/sp_course"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingLeft="5dp"
+        android:paddingTop="10dp"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/tv_doB"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.04"
+            android:gravity="center_vertical"
+            android:text="Birth:"/>
+
+        <TextView
+            android:id="@+id/tv_showDoB"
+            android:layout_width="238dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.10"
+            android:onClick="showDatePickerDialog"
+            android:text="click to select"
+            android:textColor="?attr/colorAccent"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_gender"
+            android:layout_width="72dp"
+            android:layout_height="match_parent"
+            android:text="Gender:"
+
+            android:gravity="center_vertical"/>
+
+        <RadioGroup
+            android:id="@+id/rg_gender"
+            android:layout_width="270dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <RadioButton
+                android:id="@+id/rb_female"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:text="female"
+                android:checked="true"/>
+
+            <RadioButton
+                android:id="@+id/rb_male"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:text="male"/>
+
+            <RadioButton
+                android:id="@+id/rb_secret"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:text="secret"
+                android:checked="true"/>
+        </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_studyMode"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="StudyMode:"/>
+
+        <RadioGroup
+            android:id="@+id/rg_studyMode"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+
+            <RadioButton
+                android:id="@+id/rb_fullTime"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="full-time"/>
+
+            <RadioButton
+                android:id="@+id/rb_partTime"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="part-time"/>
+        </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="338dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/tv_currentJob"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="CurrentJob:"/>
+
+        <EditText
+            android:id="@+id/et_currentJob"
+            android:layout_width="238dp"
+            android:layout_height="wrap_content"
+            android:ems="10"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/tv_nativeLanguage"
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="NativeLanguage:"/>
+
+        <Spinner
+            android:id="@+id/sp_nativeLanguage"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/tv_nationality"
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="Nationality:"/>
+
+        <Spinner
+            android:id="@+id/sp_nationality"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/tv_addr"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:text="Address:"
+            />
+
+        <EditText
+            android:id="@+id/et_addr"
+            android:layout_width="266dp"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:padding="5dp"
+        android:layout_width="338dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_suburb"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:text="Suburb:"
+            />
+
+        <EditText
+            android:id="@+id/et_suburb"
+            android:layout_width="266dp"
+            android:layout_height="wrap_content"
+            android:ems="10"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="338dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/tv_favoriteUnit"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="FavoriteUnit:"/>
+
+        <EditText
+            android:id="@+id/et_favoriteUnit"
+            android:layout_width="238dp"
+            android:layout_height="wrap_content"
+            android:ems="10"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/tv_favoriteSport"
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="FavoriteSport:"/>
+
+        <EditText
+            android:id="@+id/et_favoriteSport"
+            android:layout_width="168dp"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="338dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/tv_favoriteMovie"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="FavoriteMovie:"/>
+
+        <EditText
+            android:id="@+id/et_favoriteMovie"
+            android:layout_width="238dp"
+            android:layout_height="wrap_content"
+            android:ems="10"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_update"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="18dp"
+        android:text="update"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:layout_marginBottom="40dp"/>
+
+    </LinearLayout>
+</ScrollView>

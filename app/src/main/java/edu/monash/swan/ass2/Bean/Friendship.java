@@ -1,29 +1,42 @@
 package edu.monash.swan.ass2.Bean;
 
+import java.util.Date;
+
 /**
  * Created by owliz on 2017/5/10.
  */
 
 public class Friendship {
     private static final long serialVersionUID = 1L;
+    private static Integer fsId = 1000;
     protected FriendshipPK friendshipPK;
-    private String startDate;
-    private String endDate;
-    private Student students;
-    private Student students1;
+    private Integer id;
+    private String startingDate;
+    private String endingDate;
+    private Student sid;
+    private Student fid;
 
     public Friendship(FriendshipPK mFriendshipPK, String mStartDate, String mEndDate, Student mStudents, Student mStudents1) {
+        id=++fsId;
         friendshipPK = mFriendshipPK;
-        startDate = mStartDate;
-        endDate = mEndDate;
-        students = mStudents;
-        students1 = mStudents1;
+        startingDate = mStartDate;
+        endingDate = mEndDate;
+        sid = mStudents;
+        fid = mStudents1;
     }
 
     public Friendship() {
     }
     public Friendship(String myMonashEmail, String friendMonashEmail) {
         this.friendshipPK = new FriendshipPK(myMonashEmail, friendMonashEmail);
+        this.id = ++fsId;
+    }
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public FriendshipPK getFriendshipPK() {
@@ -34,36 +47,36 @@ public class Friendship {
         this.friendshipPK = friendshipPK;
     }
 
-    public String getStartDate() {
-        return startDate;
+    public String getStartingDate() {
+        return startingDate;
     }
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
+    public void setStartingDate(String startingDate) {
+        this.startingDate = startingDate;
     }
 
-    public String getEndDate() {
-        return endDate;
+    public String getEndingDate() {
+        return endingDate;
     }
 
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
+    public void setEndingDate(String endingDate) {
+        this.endingDate = endingDate;
     }
 
-    public Student getStudents() {
-        return students;
+    public Student getSid() {
+        return sid;
     }
 
-    public void setStudents(Student students) {
-        this.students = students;
+    public void setSid(Student sid) {
+        this.sid = sid;
     }
 
-    public Student getStudents1() {
-        return students1;
+    public Student getFid() {
+        return fid;
     }
 
-    public void setStudents1(Student students1) {
-        this.students1 = students1;
+    public void setFid(Student fid) {
+        this.fid = fid;
     }
 
 }

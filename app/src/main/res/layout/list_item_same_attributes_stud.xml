@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/list_item_same_attri_title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:padding="4dp"
+        android:text="title"
+        android:textSize="20sp"
+        android:textColor="@color/colorAccent"
+        />
+
+    <LinearLayout
+        android:id="@+id/list_item_same_attri_lt1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/list_item_same_attri_title_tv">
+
+        <TextView
+            android:id="@+id/list_item_same_attri_name_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="0.5"
+            android:padding="4dp"
+            android:text="name"
+            android:textSize="15sp"/>
+        <TextView
+            android:id="@+id/list_item_same_attri_gender_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="0.5"
+            android:padding="4dp"
+            android:text="gender"
+            android:textSize="15sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/list_item_same_attri_lt2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/list_item_same_attri_lt1">
+
+        <TextView
+            android:id="@+id/list_item_same_attri_email_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="0.5"
+            android:padding="4dp"
+            android:text="Email"
+            android:textSize="15sp"/>
+        <TextView
+            android:id="@+id/list_item_same_attri_course_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="0.5"
+            android:padding="4dp"
+            android:text="course"
+            android:textSize="15sp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/list_item_same_attri_favoriteMv_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:padding="4dp"
+        android:text="FavoriteMv"
+        android:textSize="15sp"
+        android:layout_below="@id/list_item_same_attri_lt2"/>
+    <TextView
+        android:id="@+id/list_item_same_attri_line_tv"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/list_item_same_attri_favoriteMv_tv"
+        android:layout_marginTop="0dp"
+        android:background="@color/colorAccent" />
+
+</RelativeLayout>

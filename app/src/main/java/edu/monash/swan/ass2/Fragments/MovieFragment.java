@@ -15,8 +15,6 @@ import android.widget.TextView;
 
 import net.qiujuer.genius.blur.StackBlur;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 
 import edu.monash.swan.ass2.Common.Const;
 import edu.monash.swan.ass2.Common.NetworkUtil;
@@ -27,6 +25,9 @@ import edu.monash.swan.ass2.R;
  * A simple {@link Fragment} subclass.
  */
 public class MovieFragment extends Fragment {
+
+    private String mvName;
+
     private  View view;
     private ImageView mv_image;
     private TextView mv_duration;
@@ -40,8 +41,17 @@ public class MovieFragment extends Fragment {
     private MovieInfo movieInfo;
     private MyTask mTask;
 
+
     public MovieFragment() {
-        // Required empty public constructor
+    }
+
+    public static MovieFragment newInstance(String name) {
+        Bundle args = new Bundle();
+        MovieFragment fragment = new MovieFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("mvName", name);
+        fragment.setArguments(args);
+        return fragment;
     }
 
 
@@ -101,7 +111,7 @@ public class MovieFragment extends Fragment {
         //doInBackground方法内部执行后台任务,不可在此方法内修改UI
         @Override
         protected String doInBackground(String... params) {
-            movieInfo = MovieInfo.getMoive();
+            movieInfo = MovieInfo.getMoive(mvName);
             Const.movieInfo = movieInfo;
             Const.movieBitmap = NetworkUtil.getHttpBitmap(Const.movieInfo.getPoster());
             return null;
