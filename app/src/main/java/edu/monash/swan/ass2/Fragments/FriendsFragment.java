@@ -1,5 +1,6 @@
 package edu.monash.swan.ass2.Fragments;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.DialogInterface;
@@ -15,6 +16,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +28,8 @@ import java.util.Date;
 import java.util.List;
 
 
+import edu.monash.swan.ass2.Activities.MainActivity;
+import edu.monash.swan.ass2.Activities.SearchResultActivity;
 import edu.monash.swan.ass2.Bean.Friendship;
 import edu.monash.swan.ass2.Bean.FriendshipPK;
 import edu.monash.swan.ass2.Bean.MyFriend;
@@ -43,22 +48,27 @@ import edu.monash.swan.ass2.R;
         private String mEmail;
         private String mInfo1;
         private String mInfo2;
-
+        private ImageButton button;
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
                 savedInstanceState) {
             View vFriendsUnit = inflater.inflate(R.layout.fragment_friends, container, false);
-
-
-
+             button = (ImageButton) vFriendsUnit.findViewById(R.id.btn_search);
             mid = Const.student.getId();
             mEmail = Const.student.getEmail();
 
 
             mCrimeRecyclerView = (RecyclerView) vFriendsUnit.findViewById(R.id.result_recycler_view);
             mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+            //按钮显示地图还没实现
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    Intent intent = new Intent(SearchResultActivity.this,Map.class);
+//                    startActivity(intent);
+                }
+            });
             new AsyncTask<String, Void, Integer>() {
                 @Override
                 protected Integer doInBackground(String... params) {
@@ -90,6 +100,8 @@ import edu.monash.swan.ass2.R;
                 }
             }.execute();
             return vFriendsUnit;
+
+
         }
 
         // initial adapter and recycleview

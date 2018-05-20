@@ -33,7 +33,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        //百度地图
+        <meta-data android:name="com.baidu.lbsapi.API_KEY"
+            android:value="oYgzXOCVy2Yfv4r3Gfk5rzgPZSOCP43G"/>
 
         <activity
             android:name=".Activities.MainActivity"
@@ -46,6 +48,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name="com.baidu.location.f" android:enabled="true"
+            android:process=":remote">
+        </service>
         <activity android:name=".Activities.SignupActivity" />
         <activity android:name=".Activities.SearchResultActivity" />
     </application>
