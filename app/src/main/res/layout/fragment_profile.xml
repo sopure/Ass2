@@ -1,39 +1,43 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!--<?xml version="1.0" encoding="utf-8"?>-->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:fitsSystemWindows="true">
-
-    <LinearLayout
+   android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+<LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="40dp"
+        android:paddingTop="55dp"
         android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:weightSum="1">
+        android:paddingRight="24dp">
+<!--<LinearLayout-->
+    <!--android:orientation="vertical"-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--android:paddingTop="30dp"-->
+    <!--android:paddingLeft="24dp"-->
+    <!--android:paddingRight="24dp"-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="fill_parent">-->
 
-    <TextView
-        android:id="@+id/tv1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="INDIVIDUAL PROFLIE"
-        android:textColor="@color/dodgerblue"
-        android:textSize="30sp"
-        android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="339dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="INDIVIDUAL PROFLIE"
+            android:textColor="@color/dodgerblue"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tv2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="modify as you wish"
-        android:textColor="@color/dodgerblue"
-        android:textSize="15sp"
-        android:padding="10dp"
-        />
+        <TextView
+            android:id="@+id/tv2"
+            android:layout_width="339dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="modify as you wish"
+            android:textColor="@color/dodgerblue"
+            android:textSize="15sp" />
 
     <LinearLayout
         android:padding="5dp"
@@ -51,32 +55,32 @@
             android:id="@+id/et_email"
             android:layout_width="266dp"
             android:layout_height="wrap_content"
+            android:enabled="false"
             />
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="338dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="5dp">
-
-        <TextView
-            android:id="@+id/tv_newPswd"
-            android:layout_width="72dp"
-            android:layout_height="30dp"
-            android:text="Password:"
-            />
-
-        <EditText
-            android:id="@+id/et_newPswd"
-            android:layout_width="260dp"
+        <LinearLayout
+            android:layout_width="338dp"
             android:layout_height="wrap_content"
-            android:hint="input to modify"
-            android:textColorHint="@color/thistle"
-            android:ems="10"/>
+            android:orientation="horizontal"
+            android:padding="5dp">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tv_newPswd"
+                android:layout_width="72dp"
+                android:layout_height="wrap_content"
+                android:text="Password:" />
+
+            <EditText
+                android:id="@+id/et_newPswd"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="input to modify"
+                android:textColorHint="@color/thistle" />
+
+        </LinearLayout>
 
     <LinearLayout
         android:padding="5dp"
@@ -136,7 +140,7 @@
             android:text="Course:"/>
 
         <Spinner
-            android:id="@+id/sp_course"
+            android:id="@+id/spt_course"
             android:layout_width="230dp"
             android:layout_height="wrap_content"/>
 
@@ -222,10 +226,10 @@
 
         <TextView
             android:id="@+id/tv_studyMode"
-            android:layout_width="90dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="StudyMode:"/>
+            android:text="StudyMode:" />
 
         <RadioGroup
             android:id="@+id/rg_studyMode"
@@ -285,7 +289,7 @@
             android:text="NativeLanguage:"/>
 
         <Spinner
-            android:id="@+id/sp_nativeLanguage"
+            android:id="@+id/sp_language"
             android:layout_width="150dp"
             android:layout_height="wrap_content"/>
     </LinearLayout>
@@ -380,15 +384,16 @@
 
         <TextView
             android:id="@+id/tv_favoriteSport"
-            android:layout_width="130dp"
+            android:layout_width="101dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="FavoriteSport:"/>
+            android:text="FavoriteSport:" />
 
         <EditText
             android:id="@+id/et_favoriteSport"
-            android:layout_width="168dp"
-            android:layout_height="wrap_content"/>
+            android:layout_width="226dp"
+            android:layout_height="wrap_content"
+            android:inputType="" />
     </LinearLayout>
 
     <LinearLayout
@@ -411,15 +416,18 @@
 
     </LinearLayout>
 
-    <Button
+
+
+    <com.dd.CircularProgressButton
         android:id="@+id/btn_update"
         android:layout_width="fill_parent"
         android:layout_height="40dp"
         android:layout_marginTop="18dp"
-        android:text="update"
         android:textColor="@color/white"
         android:textSize="18sp"
-        android:layout_marginBottom="40dp"/>
+        android:layout_marginBottom="40dp"
+        android:text="@string/update"/>
+
 
     </LinearLayout>
 </ScrollView>

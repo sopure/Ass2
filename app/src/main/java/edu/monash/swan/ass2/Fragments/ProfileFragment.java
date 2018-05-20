@@ -1,7 +1,8 @@
 package edu.monash.swan.ass2.Fragments;
 
-import android.app.DialogFragment;
+
 import android.support.v4.app.Fragment;
+import android.support.v4.app.DialogFragment;
 import android.database.SQLException;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,14 +28,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import database.DBStructure.DBManager;
+//import database.DBStructure.DBManager;
 import edu.monash.swan.ass2.Common.Const;
-import edu.monash.swan.ass2.Common.DatePickerFragment;
+import edu.monash.swan.ass2.Common.DatePickerFragment1;
 import edu.monash.swan.ass2.Bean.Student;
 import edu.monash.swan.ass2.Common.MD5Util;
 import edu.monash.swan.ass2.Common.NetworkUtil;
 import edu.monash.swan.ass2.R;
-
+import com.dd.CircularProgressButton;
 
 
 public class ProfileFragment extends Fragment {
@@ -60,9 +61,9 @@ public class ProfileFragment extends Fragment {
     private Spinner msp_course;
     private Spinner msp_nation;
     private Spinner msp_language;
-    private Button mbtn_update;
+    private CircularProgressButton mbtn_update;
 
-    protected DBManager dbManager;
+//    protected DBManager dbManager;
 
     View vProfileUnit;
 
@@ -73,7 +74,7 @@ public class ProfileFragment extends Fragment {
         vProfileUnit = inflater.inflate(R.layout.fragment_profile, container, false);
 
         // 初始化dbManager
-        dbManager = new DBManager(getActivity().getApplicationContext());
+//        dbManager = new DBManager(getActivity().getApplicationContext());
 
 
         //获取SharedPreferences值
@@ -90,7 +91,7 @@ public class ProfileFragment extends Fragment {
         final String address = Const.student.getAddress();
         String suburb = Const.student.getSuburb();
         final String nationality = Const.student.getNationality();
-        String language = Const.student.getLanguage();
+        final String language = Const.student.getLanguage();
         final String favouriteSport = Const.student.getFavouriteSport();
         final String favouriteMovie = Const.student.getFavouriteMovie();
         final String favouriteUnit = Const.student.getFavouriteUnit();
@@ -112,19 +113,22 @@ public class ProfileFragment extends Fragment {
         mrdg_gender = (RadioGroup) vProfileUnit.findViewById(R.id.rg_gender);
         mrdg_studyMd = (RadioGroup) vProfileUnit.findViewById(R.id.rg_studyMode);
         // Spinner element
-        msp_course = (Spinner) vProfileUnit.findViewById(R.id.sp_course);
+        msp_course = (Spinner) vProfileUnit.findViewById(R.id.spt_course);
         msp_nation = (Spinner) vProfileUnit.findViewById(R.id.sp_nationality);
-        msp_language = (Spinner) vProfileUnit.findViewById(R.id.sp_nativeLanguage);
+        msp_language = (Spinner) vProfileUnit.findViewById(R.id.sp_language);
         msp_favouriteSport = (EditText) vProfileUnit.findViewById(R.id.et_favoriteSport);
         // CircularProgressButton element
-        mbtn_update = (Button) vProfileUnit.findViewById(R.id.btn_update);
+        mbtn_update = (CircularProgressButton) vProfileUnit.findViewById(R.id.btn_update);
+        mbtn_update.setIdleText("UPDATE");
+        mbtn_update.setCompleteText("Successful!");
+        mbtn_update.setErrorText("Error");
 
-        // Loading spinner data from database
-        loadNationSpinnerData();
-        loadNativeLanguageSpinnerData();
+
 
         // Loading spinner data from stringArry
         loadCourseSpinnerData();
+        loadNationSpinnerData();
+        loadLanguageSpinnerData();
         //initial form
         met_email.setText(email);
         met_pswd.setText(password);
@@ -137,6 +141,7 @@ public class ProfileFragment extends Fragment {
         met_suburb.setText(suburb);
         met_FavouriteUt.setText(favouriteUnit);
         met_favouriteMv.setText(favouriteMovie);
+        msp_favouriteSport.setText(favouriteSport);
         //initial gender
         switch (gender) {
             case "female":
@@ -201,7 +206,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-
+        mbtn_update.setIndeterminateProgressMode(true); // turn on indeterminate progress
 
         /*mbtn_signup.setProgress(1); // set progress > 0 & < 100 to display indeterminate progress
         mbtn_signup.setProgress(100); // set progress to 100 or -1 to indicate complete or error state*/
@@ -211,6 +216,7 @@ public class ProfileFragment extends Fragment {
 
                                            @Override
                                            public void onClick(View v) {
+                                               mbtn_update.setProgress(20);
                                                final Integer myId = Const.student.getId();
                                                final String myPswd = met_pswd.getText().toString().isEmpty()?Const.student.getPassword():MD5Util.getMD5(met_pswd.getText().toString());;
                                                final String firstNm = met_firstNm.getText().toString();
@@ -229,16 +235,18 @@ public class ProfileFragment extends Fragment {
                                                final String course = msp_course.getSelectedItem().toString();
                                                final String language = msp_language.getSelectedItem().toString();
                                                final String nation = msp_nation.getSelectedItem().toString();
-                                               final String favoriteSpt = msp_favouriteSport.toString();
+                                               final String favoriteSpt = msp_favouriteSport.getText().toString();
 
 // Validate user input
 
                                                if (firstNm.isEmpty()) {
                                                    met_firstNm.setError("firstNm is required!");
+                                                   mbtn_update.setProgress(0);
                                                    return;
                                                }
                                                if (surNm.isEmpty()) {
                                                    met_surNm.setError("surtNm is required!");
+                                                   mbtn_update.setProgress(0);
                                                    return;
                                                }
 
@@ -251,14 +259,15 @@ public class ProfileFragment extends Fragment {
                                                new AsyncTask<String, Void, Integer>() {
                                                    @Override
                                                    protected Integer doInBackground(String... params) {
-                                                       Student stu = new Student(firstNm, surNm, doB, gender, course, studyMd, addr, suburb, nation, language, favoriteSpt, favoriteMv, favoriteUt, currentJb, email, myPswd);
-
-                                                       NetworkUtil.updateProfile(myId, stu);
+                                                       Student stu = new Student(myId, firstNm, surNm, doB, gender, course, studyMd, addr, suburb, nation, language, favoriteSpt, favoriteMv, favoriteUt, currentJb, email, myPswd);
+                                                       String student = stu.convert().toString();
+                                                       NetworkUtil.updateProfile(myId, student);
                                                        return 1;
                                                    }
 
                                                    @Override
                                                    protected void onPostExecute(Integer info) {
+                                                       mbtn_update.setProgress(100);
                                                        Const.student.setEmail(email);
                                                        Const.student.setPassword(myPswd);
                                                        Const.student.setFirstName(firstNm);
@@ -277,6 +286,8 @@ public class ProfileFragment extends Fragment {
                                                        Const.student.setCurrentJob(currentJb);
                                                        new Handler().postDelayed(new Runnable() {
                                                            public void run() {
+                                                               mbtn_update.setProgress(0);
+                                                               mbtn_update.setCompleteText("Successful!");
                                                            }
                                                        }, 1000);
 
@@ -322,59 +333,81 @@ public class ProfileFragment extends Fragment {
         mtv_showDoB.setText(s_year + "-" + s_month + "-" + s_day);
     }
 
-    /**
-     * Function to load the Nationality spinner data from SQLite database
-     */
-    public void loadNationSpinnerData() {
-
-        try {
-            dbManager.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        // Spinner Drop down elements
-        List<String> lables = dbManager.getAllNation();
-
-        // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_item, lables);
-
-        // Drop down layout style - list view with radio button
-        dataAdapter
-                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        msp_nation.setAdapter(dataAdapter);
-
-        dbManager.close();
-    }
-
-    public void loadNativeLanguageSpinnerData() {
-
-        try {
-            dbManager.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        // Spinner Drop down elements
-        List<String> lables = dbManager.getAllNativeLanguage();
-
-        // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, lables);
-
-        // Drop down layout style - list view with radio button
-        dataAdapter
-                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        msp_language.setAdapter(dataAdapter);
-
-        dbManager.close();
-    }
+//    /**
+//     * Function to load the Nationality spinner data from SQLite database
+//     */
+//    public void loadNationSpinnerData() {
+//
+//        try {
+//            dbManager.open();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        // Spinner Drop down elements
+//        List<String> lables = dbManager.getAllNation();
+//
+//        // Creating adapter for spinner
+//        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(),
+//                android.R.layout.simple_spinner_item, lables);
+//
+//        // Drop down layout style - list view with radio button
+//        dataAdapter
+//                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//
+//        // attaching data adapter to spinner
+//        msp_nation.setAdapter(dataAdapter);
+//
+//        dbManager.close();
+//    }
+//
+//    public void loadNativeLanguageSpinnerData() {
+//
+//        try {
+//            dbManager.open();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        // Spinner Drop down elements
+//        List<String> lables = dbManager.getAllNativeLanguage();
+//
+//        // Creating adapter for spinner
+//        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, lables);
+//
+//        // Drop down layout style - list view with radio button
+//        dataAdapter
+//                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//
+//        // attaching data adapter to spinner
+//        msp_language.setAdapter(dataAdapter);
+//
+//        dbManager.close();
+//    }
 
     /**
      * Function to load the Course spinner data from SQLite database
      */
+    public void loadNationSpinnerData() {
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.nationality, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        msp_nation.setAdapter(adapter);
+    }
+
+    public void loadLanguageSpinnerData() {
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.languages, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        msp_language.setAdapter(adapter);
+    }
+
     public void loadCourseSpinnerData() {
 
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -397,6 +430,10 @@ public class ProfileFragment extends Fragment {
         return str;
     }
 
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment1();
+        newFragment.show(getFragmentManager(), "datePicker");
+    }
     /**
      * 根据值, 设置spinner默认选中:
      *

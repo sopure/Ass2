@@ -79,7 +79,7 @@ public class NetworkUtil {
             if(jsonArray != null) {
                 try{
                     JSONObject js = (JSONObject)jsonArray.get(0);
-                    String sid = js.getString("sid");
+                    Integer sid = js.getInt("sid");
                     String firstName = js.getString("firstnm");
                     String surname = js.getString("surname");
                     String dob = js.getString("dob");
@@ -214,29 +214,35 @@ public class NetworkUtil {
         return bitmap;
     }
 
-    public static int updateProfile(Integer id, Student student) {
+    public static void updateProfile(Integer id, String student) {
+        final String methodPath ="modifyById/"+id;
         URL url = null;
         HttpURLConnection conn = null;
-        final String methodPath =  String.valueOf(id) ;
+        String txtResult="";
+// Making HTTP request
         try {
-            Gson gson = new Gson();
-            String studentJson = gson.toJson(student);
             url = new URL(StudentFacadeREST + methodPath);
+//open the connection
             conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(10000);
-            conn.setConnectTimeout(15000);
-            conn.setRequestMethod("PUT");
-            conn.setDoOutput(true);
-            conn.setFixedLengthStreamingMode(studentJson.getBytes().length);
+//set the connection method to GET
+            conn.setRequestProperty("connection", "keep-alive");
+            conn.setUseCaches(false);//设置不要缓存
+            conn.setInstanceFollowRedirects(true);
+            conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
-            PrintWriter out = new PrintWriter(conn.getOutputStream());
-            out.print(studentJson);
-            out.close();
-            Log.i("error", new Integer(conn.getResponseCode()).toString());
-            return conn.getResponseCode();
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            DataOutputStream os =new DataOutputStream(conn.getOutputStream());
+            os.writeBytes(student);
+            os.flush();
+            final Integer STATUS = conn.getResponseCode();
+            if(STATUS==200||STATUS==204)
+                System.out.println("success!");
+            Log.i("update_log",new Integer(conn.getResponseCode()).toString());
+            os.close();
         } catch (Exception e) {
             e.printStackTrace();
-            return 400;
         } finally {
             conn.disconnect();
         }

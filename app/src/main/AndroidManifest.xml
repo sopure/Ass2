@@ -47,6 +47,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.SignupActivity" />
+        <activity android:name=".Activities.SearchResultActivity" />
     </application>
 
 </manifest>

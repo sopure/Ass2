@@ -42,8 +42,8 @@ public class Student{
         this.password = password;
     }
 
-    public Student(String sid, String firstName, String surname, String dob, String gender, String course, String studyMode, String address, String suburb, String nationality, String language, String favouriteSport, String favouriteMovie, String favouriteUnit, String currentJob, String email, String password) {
-        this.sid = Integer.parseInt(sid);
+    public Student(Integer sid, String firstName, String surname, String dob, String gender, String course, String studyMode, String address, String suburb, String nationality, String language, String favouriteSport, String favouriteMovie, String favouriteUnit, String currentJob, String email, String password) {
+        this.sid = sid;
         this.firstName = firstName;
         this.surname = surname;
         this.dob = dob;

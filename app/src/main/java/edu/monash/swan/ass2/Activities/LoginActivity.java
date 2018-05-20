@@ -96,10 +96,10 @@ public class LoginActivity extends Activity implements OnClickListener {
     }
 
     private boolean verification(){
-        String username = mUsername.getText().toString();
-        // String username ="1@monash.edu.cn";
-        String password = mPassword.getText().toString();
-        //String password = "123";
+        //String username = mUsername.getText().toString();
+        String username ="4@monash.edu.cn";
+        //String password = mPassword.getText().toString();
+        String password = "321";
         Student student = NetworkUtil.findByEmail(username);
         if(student != null && MD5Util.getMD5(password).equals(student.getPassword())){
             Const.student = student;

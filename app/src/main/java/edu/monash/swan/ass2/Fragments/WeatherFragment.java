@@ -130,7 +130,7 @@ public class WeatherFragment extends Fragment {
         }
         String comfort = "舒适度：" + weather.suggestion.comf;
         String carWash = "洗车指数：" + weather.suggestion.drsg;
-        String sport = "运行建议：" + weather.suggestion.sport;
+        String sport = "出行建议：" + weather.suggestion.sport;
         comfortText.setText(comfort);
         carWashText.setText(carWash);
         sportText.setText(sport);
