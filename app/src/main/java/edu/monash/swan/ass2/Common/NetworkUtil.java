@@ -249,37 +249,50 @@ public class NetworkUtil {
         }
     }
 
-    public static int createFriendship(Friendship fsp) {
+    public static void createFriendship(Friendship fsp) {
         //initialise
         URL url = null;
         HttpURLConnection conn = null;
-        final String methodPath = "addFriend/";
+        final String methodPath = "addfriendship/";
         try {
             Gson gson = new Gson();
-            String stringCourseJson = gson.toJson(fsp);
+            String stringFriendJson = gson.toJson(fsp);
             url = new URL(FriendshipFacadeREST + methodPath);
-//open the connection
+//            conn.setReadTimeout(10000);
+//            conn.setConnectTimeout(15000);
+//            conn.setFixedLengthStreamingMode(stringFriendJson.getBytes().length);
+//            conn.setRequestProperty("Content-Type", "application/json");
+//            PrintWriter out = new PrintWriter(conn.getOutputStream());
+//            out.print(stringFriendJson);
+//
+//            out.close();
+//            return conn.getResponseCode();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return 400;
+//        } finally {
+//
+//            conn.disconnect();
+//        }
             conn = (HttpURLConnection) url.openConnection();
-//set the timeout
-            conn.setReadTimeout(10000);
-            conn.setConnectTimeout(15000);
-//set the connection method to POST
+            conn.setRequestProperty("connection", "keep-alive");
+            conn.setUseCaches(false);//设置不要缓存
+            conn.setInstanceFollowRedirects(true);
             conn.setRequestMethod("POST");
-//set the output to true
-            conn.setDoOutput(true);
-//set length of the data you want to send
-            conn.setFixedLengthStreamingMode(stringCourseJson.getBytes().length);
-//add HTTP headers
             conn.setRequestProperty("Content-Type", "application/json");
-//Send the POST out
-            PrintWriter out = new PrintWriter(conn.getOutputStream());
-            out.print(stringCourseJson);
-            out.close();
-            Log.i("error", new Integer(conn.getResponseCode()).toString());
-            return conn.getResponseCode();
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            DataOutputStream os =new DataOutputStream(conn.getOutputStream());
+            os.writeBytes(stringFriendJson);
+            os.flush();
+            final Integer STATUS = conn.getResponseCode();
+            if(STATUS==200||STATUS==204)
+                System.out.println("success!");
+            Log.i("update_log",new Integer(conn.getResponseCode()).toString());
+            os.close();
         } catch (Exception e) {
             e.printStackTrace();
-            return 400;
         } finally {
             conn.disconnect();
         }

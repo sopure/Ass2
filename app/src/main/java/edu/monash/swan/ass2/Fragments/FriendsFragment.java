@@ -27,6 +27,7 @@ import java.util.List;
 
 
 import edu.monash.swan.ass2.Activities.MoiveActivity;
+import edu.monash.swan.ass2.Activities.ProfileActivity;
 import edu.monash.swan.ass2.Bean.Friendship;
 import edu.monash.swan.ass2.Bean.FriendshipPK;
 import edu.monash.swan.ass2.Bean.MyFriend;
@@ -217,10 +218,12 @@ import edu.monash.swan.ass2.R;
 
                                     Toast.makeText(getActivity().getApplicationContext(), "detail info", Toast.LENGTH_SHORT).show();
                                     // refresh fragment
-                                    Fragment nextFragment = new FriendProfileFrag();
-                                    FragmentManager fragmentManager = getFragmentManager();
-                                    fragmentManager.beginTransaction().replace(R.id.content_main,
-                                            nextFragment).commit();
+//                                    Fragment nextFragment = new FriendProfileFrag();
+//                                    FragmentManager fragmentManager = getFragmentManager();
+//                                    fragmentManager.beginTransaction().replace(R.id.content_main,
+//                                            nextFragment).commit();
+                                    Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                                    startActivity(intent);
                                 }
                             }.execute();
 
@@ -266,6 +269,24 @@ import edu.monash.swan.ass2.R;
 
                             break;
                         case AlertDialog.BUTTON_NEUTRAL:
+//                            new AsyncTask<String, Void, Integer>() {
+//
+//                                @Override
+//                                protected Integer doInBackground(String... params) {
+//                                    String FavuriteMovie = mMyFriend.getFavoriteMovie();
+//                                    editor.putString("FovuriteMovie", FavuriteMovie);
+//                                    editor.commit();
+//                                    return 1;
+//                                }
+//                                @Override
+//                                protected void onPostExecute (Integer info) {
+//                                    Fragment nextFragment = MovieFragment.newInstance(mMyFriend.getFavoriteMovie());
+//                                    FragmentManager fragmentManager = getFragmentManager();
+//                                    fragmentManager.beginTransaction().add(R.id.content_main,
+//                                            nextFragment).commit();
+//                                }
+//                            }.execute();
+
                             new AsyncTask<String, Void, Integer>() {
 
                                 @Override
@@ -277,10 +298,8 @@ import edu.monash.swan.ass2.R;
                                 }
                                 @Override
                                 protected void onPostExecute (Integer info) {
-                                    Fragment nextFragment = MovieFragment.newInstance(mMyFriend.getFavoriteMovie());
-                                    FragmentManager fragmentManager = getFragmentManager();
-                                    fragmentManager.beginTransaction().replace(R.id.content_main,
-                                            nextFragment).commit();
+                                    Intent intent = new Intent(getActivity(), MoiveActivity.class);
+                                    startActivity(intent);
                                 }
                             }.execute();
                             break;

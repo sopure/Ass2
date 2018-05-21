@@ -119,9 +119,7 @@ public class ProfileFragment extends Fragment {
         msp_favouriteSport = (EditText) vProfileUnit.findViewById(R.id.et_favoriteSport);
         // CircularProgressButton element
         mbtn_update = (CircularProgressButton) vProfileUnit.findViewById(R.id.btn_update);
-        mbtn_update.setIdleText("UPDATE");
-        mbtn_update.setCompleteText("Successful!");
-        mbtn_update.setErrorText("Error");
+
 
 
 
@@ -207,6 +205,10 @@ public class ProfileFragment extends Fragment {
         });
 
         mbtn_update.setIndeterminateProgressMode(true); // turn on indeterminate progress
+        mbtn_update.setText("UPDATE");
+        mbtn_update.setIdleText("UPDATE");
+        mbtn_update.setErrorText("ERROR");
+        mbtn_update.setCompleteText("Successful!");
 
         /*mbtn_signup.setProgress(1); // set progress > 0 & < 100 to display indeterminate progress
         mbtn_signup.setProgress(100); // set progress to 100 or -1 to indicate complete or error state*/
@@ -288,6 +290,7 @@ public class ProfileFragment extends Fragment {
                                                            public void run() {
                                                                mbtn_update.setProgress(0);
                                                                mbtn_update.setCompleteText("Successful!");
+                                                               mbtn_update.setText("UPDATE");
                                                            }
                                                        }, 1000);
 

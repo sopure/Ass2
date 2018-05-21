@@ -54,6 +54,7 @@
         <activity android:name=".Activities.SignupActivity" />
         <activity android:name=".Activities.SearchResultActivity" />
         <activity android:name=".Activities.MoiveActivity" />
+        <activity android:name=".Activities.ProfileActivity" />
     </application>
 
 </manifest>

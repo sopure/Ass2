@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
-
+import com.dd.CircularProgressButton;
 
 import edu.monash.swan.ass2.Activities.SearchResultActivity;
 import edu.monash.swan.ass2.Common.Const;
@@ -53,52 +53,49 @@ public class FindNewfragment extends Fragment {
         final CheckBox mcb_suburb = (CheckBox) vNewFellowUnit.findViewById(R.id.cb8);
         final CheckBox mcb_favouriteUnit = (CheckBox) vNewFellowUnit.findViewById(R.id.cb9);
         final CheckBox mcb_favoriteSport = (CheckBox) vNewFellowUnit.findViewById(R.id.cb10);
-        final CheckBox mcb_favoriteMovieType = (CheckBox) vNewFellowUnit.findViewById(R.id.cb11);
-        final CheckBox mcb_favoriteMovie = (CheckBox) vNewFellowUnit.findViewById(R.id.cb12);
+        final CheckBox mcb_favoriteMovie = (CheckBox) vNewFellowUnit.findViewById(R.id.cb11);
 
         // button
-        final Button mbtn_search = (Button) vNewFellowUnit.findViewById(R.id.btn_search);
-
+        final CircularProgressButton mbtn_search = (CircularProgressButton) vNewFellowUnit.findViewById(R.id.btn_search);
+        mbtn_search.setText("SEARCH");
         mbtn_search.setOnClickListener(new View.OnClickListener() {
 
                                            @Override
                                            public void onClick(View v) {
+                                               mbtn_search.setProgress(20);
                                                String attributes = "";
                                                if (mcb_doB.isChecked()) {
-                                                   attributes += "doB,";
+                                                   attributes += "dob ";
                                                }
                                                if (mcb_gender.isChecked()) {
-                                                   attributes += "gender,";
+                                                   attributes += "gender ";
                                                }
                                                if (mcb_course.isChecked()) {
-                                                   attributes += "course,";
+                                                   attributes += "course ";
                                                }
                                                if (mcb_studyMode.isChecked()) {
-                                                   attributes += "studyMode,";
+                                                   attributes += "studyMode ";
                                                }
                                                if (mcb_nationality.isChecked()) {
-                                                   attributes += "nationality,";
+                                                   attributes += "nationality ";
                                                }
                                                if (mcb_nativeLanguage.isChecked()) {
-                                                   attributes += "nativeLanguage,";
+                                                   attributes += "language ";
                                                }
                                                if (mcb_address.isChecked()) {
-                                                   attributes += "address,";
+                                                   attributes += "address ";
                                                }
                                                if (mcb_suburb.isChecked()) {
-                                                   attributes += "suburb,";
+                                                   attributes += "suburb ";
                                                }
                                                if (mcb_favouriteUnit.isChecked()) {
-                                                   attributes += "favouriteUnit,";
+                                                   attributes += "favouriteUnit ";
                                                }
                                                if (mcb_favoriteSport.isChecked()) {
-                                                   attributes += "favoriteSport,";
-                                               }
-                                               if (mcb_favoriteMovieType.isChecked()) {
-                                                   attributes += "favoriteMovieType,";
+                                                   attributes += "favouriteSport ";
                                                }
                                                if (mcb_favoriteMovie.isChecked()) {
-                                                   attributes += "favoriteMovie,";
+                                                   attributes += "favouriteMovie ";
                                                }
                                                if (attributes.length() > 0) {
                                                    attributes = attributes.substring(0, attributes.length() - 1);
@@ -106,6 +103,7 @@ public class FindNewfragment extends Fragment {
                                                Log.d("FindNewFragment", "属性：" + attributes);
                                                if (attributes.isEmpty()) {
                                                    Toast.makeText(getActivity().getApplicationContext(), "please select attributes!", Toast.LENGTH_SHORT).show();
+                                                   mbtn_search.setProgress(0);
                                                    return;
                                                }
 
@@ -122,7 +120,9 @@ public class FindNewfragment extends Fragment {
 
                                                    @Override
                                                    protected void onPostExecute(String result) {
+                                                       mbtn_search.setProgress(0);
                                                        if(!result.equals("[]")){
+                                                           mbtn_search.setCompleteText("Successful!");
                                                            Intent intent = new Intent(getActivity(), SearchResultActivity.class);
                                                            startActivity(intent);}
                                                        else{Toast.makeText(getActivity().getApplicationContext(), "No matched student!", Toast.LENGTH_SHORT).show();}
