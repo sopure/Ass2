@@ -6,8 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,30 +16,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import database.DBStructure.DBManager;
+import edu.monash.swan.ass2.Activities.MoiveActivity;
 import edu.monash.swan.ass2.Bean.Friendship;
-import edu.monash.swan.ass2.Bean.FriendshipPK;
+import edu.monash.swan.ass2.Common.Const;
 import edu.monash.swan.ass2.Common.NetworkUtil;
 import edu.monash.swan.ass2.Bean.SameAttriStud;
 import edu.monash.swan.ass2.Bean.SameAttriStudLab;
 import edu.monash.swan.ass2.Bean.Student;
 import edu.monash.swan.ass2.R;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by owliz on 2017/5/10.
@@ -65,7 +61,7 @@ public class SearchResultListFragment extends Fragment {
         editor = pref.edit();
         String result = pref.getString("searchResult", "this is default value");
         Log.d("SearchResultFragment", "result shared is：" + result);
-        monashEmail = pref.getString("monashEmail", "this is default value");
+        monashEmail = Const.student.getEmail();
         Log.d("SearchResultFragment", "monashEmail shared is：" + result);
 
         currentDate = formatCurrentDate();
@@ -207,26 +203,56 @@ public class SearchResultListFragment extends Fragment {
                                 Student stu1 = gson.fromJson(myInfo, Student.class);
                                 Student stu2 = gson.fromJson(friendInfo, Student.class);
 
-                                FriendshipPK fspPK = new FriendshipPK(myMonashEmail, Friendemail);
-                                Friendship fsp = new Friendship(fspPK, currentDate, "", stu1, stu2);
-                                if (NetworkUtil.createFriendship(fsp) == 204) {
+//                                FriendshipPK fspPK = new FriendshipPK(myMonashEmail, Friendemail);
+                               Friendship fsp = new Friendship( currentDate, "", stu1, stu2);
+                              //  FriendshipNew fspn = new FriendshipNew(currentDate,"",stu1.getId(),stu2.getId() );
+                               // String fs = fspn.convert().toString();
+                                NetworkUtil.createFriendship(fsp);
                                     return 1;
-                                } else {
-                                    return 0;
-                                }
                             }
 
                             @Override
                             protected void onPostExecute(Integer info) {
-                                if (info == 1) {
+//                                if (info == 1) {
                                     Toast.makeText(getActivity().getApplicationContext(), "Successful Added!", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(getActivity().getApplicationContext(), "You are friends already!", Toast.LENGTH_SHORT).show();
-                                }
+//                                } else {
+//                                    Toast.makeText(getActivity().getApplicationContext(), "You are friends already!", Toast.LENGTH_SHORT).show();
+//                                }
                             }
                         }.execute();
                         break;
                     case AlertDialog.BUTTON_NEUTRAL:// SEE FAVORITEMOVIE
+                        //create an anonymous AsyncTask
+//                                String myInfo, friendInfo;
+//                        new AsyncTask<String, Void, Integer>() {
+//                            String FavoriteMovie = mSameAttriStud.getFavoriteMovie();
+////                            @Override
+//                           protected Integer doInBackground(String... params) {
+//
+//                          return 1;
+//                         }
+//                            @Override
+//                           protected void onPostExecute(Integer info) {
+//                                FragmentManager FM = getChildFragmentManager();
+//                                FragmentTransaction mFragmentTransaction =FM.beginTransaction();
+//                                movieFragmentF movieFragment  = movieFragmentF.newInstance(FavoriteMovie);
+//                                mFragmentTransaction.replace(R.id.fragment_movie_f, movieFragment);
+//                                  mFragmentTransaction.commit();
+                        new AsyncTask<String, Void, Integer>() {
+
+                            @Override
+                            protected Integer doInBackground(String... params) {
+                                String FavuriteMovie = mSameAttriStud.getFavoriteMovie();
+                                editor.putString("FovuriteMovie", FavuriteMovie);
+                                editor.commit();
+                                return 1;
+                            }
+                            @Override
+                            protected void onPostExecute (Integer info) {
+                              Intent intent = new Intent(getActivity(), MoiveActivity.class);
+                                                     startActivity(intent);
+                            }
+                       }.execute();
 
                         break;
                     default:

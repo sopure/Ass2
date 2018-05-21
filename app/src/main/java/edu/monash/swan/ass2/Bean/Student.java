@@ -5,7 +5,7 @@ import org.json.JSONObject;
 public class Student{
 
     private Integer sid;
-    private String firstName;
+    private String firstnm;
     private String surname;
     private String dob;
     private String gender;
@@ -24,7 +24,7 @@ public class Student{
 
     public Student(String firstName, String surname, String dob, String gender, String course, String studyMode, String address, String suburb, String nationality, String language, String favouriteSport, String favouriteMovie, String favouriteUnit, String currentJob, String email, String password) {
 
-        this.firstName = firstName;
+        this.firstnm = firstName;
         this.surname = surname;
         this.dob = dob;
         this.gender = gender;
@@ -44,7 +44,7 @@ public class Student{
 
     public Student(Integer sid, String firstName, String surname, String dob, String gender, String course, String studyMode, String address, String suburb, String nationality, String language, String favouriteSport, String favouriteMovie, String favouriteUnit, String currentJob, String email, String password) {
         this.sid = sid;
-        this.firstName = firstName;
+        this.firstnm = firstName;
         this.surname = surname;
         this.dob = dob;
         this.gender = gender;
@@ -66,7 +66,7 @@ public class Student{
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("sid", this.sid);
-            jsonObject.put("firstName", this.firstName);
+            jsonObject.put("firstnm", this.firstnm);
             jsonObject.put("surname", this.surname);
             jsonObject.put("dob", this.dob);
             jsonObject.put("gender", this.gender);
@@ -90,11 +90,11 @@ public class Student{
 
 
     public String getFirstName() {
-        return firstName;
+        return firstnm;
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.firstnm = firstName;
     }
 
     public String getSurname() {

@@ -1,5 +1,6 @@
 package edu.monash.swan.ass2.Fragments;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.DialogInterface;
@@ -25,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 
+import edu.monash.swan.ass2.Activities.MoiveActivity;
 import edu.monash.swan.ass2.Bean.Friendship;
 import edu.monash.swan.ass2.Bean.FriendshipPK;
 import edu.monash.swan.ass2.Bean.MyFriend;
@@ -44,12 +46,18 @@ import edu.monash.swan.ass2.R;
         private String mInfo1;
         private String mInfo2;
 
+        private SharedPreferences pref;
+        private SharedPreferences.Editor editor;
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
                 savedInstanceState) {
             View vFriendsUnit = inflater.inflate(R.layout.fragment_friends, container, false);
+            //持久化存储数据
+            pref = this.getActivity().getSharedPreferences("admin", getActivity().getApplicationContext().MODE_PRIVATE);
 
+            //获取SharedPreferences.Editor对象
+            editor = pref.edit();
 
 
             mid = Const.student.getId();
@@ -155,9 +163,9 @@ import edu.monash.swan.ass2.R;
                 // 设置对话框消息
 //            isExit.setMessage("Do you want to add this friend?");
                 // 添加选择按钮并注册监听
-               // isExit.setButton(DialogInterface.BUTTON_NEGATIVE, "DETAIL INFO", listener);
+                isExit.setButton(DialogInterface.BUTTON_NEGATIVE, "DETAIL INFO", listener);
                 isExit.setButton(DialogInterface.BUTTON_POSITIVE, "DELETE FRIEND", listener);
-                isExit.setButton(DialogInterface.BUTTON_NEUTRAL, "SHOW FRIENDS IN MAP", listener);
+                isExit.setButton(DialogInterface.BUTTON_NEUTRAL, "SEE HIS/HER FAVORITE MOVIE", listener);
                 // 显示对话框
                 isExit.show();
             }
@@ -169,9 +177,56 @@ import edu.monash.swan.ass2.R;
 
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
-                        case AlertDialog.BUTTON_POSITIVE://
+                        case AlertDialog.BUTTON_NEGATIVE://
                             // 删除朋友关系；
                             //create an anonymous AsyncTask
+                            new AsyncTask<String, Void, Integer>() {
+
+                                @Override
+                                protected Integer doInBackground(String... params) {
+                                    String myInfo, friendInfo, finalquery;
+                                    Integer id = mMyFriend.getid();
+                                    String Friendemail = mMyFriend.getEmail();
+                                    String[] arr = Friendemail.split("\\s+");
+                                    Friendemail = arr[arr.length - 1];
+                                    String myMonashEmail = mEmail;
+                                    Log.d("FriendsFragment", "delete myMonashEmail is：" + myMonashEmail);
+                                    Student student = NetworkUtil.findByEmail(Friendemail);;
+                                    editor.putString("monashEmail", student.getEmail());
+
+                                    editor.putString("firstName", student.getFirstName());
+                                    editor.putString("surname", student.getSurname());
+                                    editor.putString("doB", student.getDob());
+                                    editor.putString("gender", student.getGender());
+                                    editor.putString("course", student.getCourse());
+                                    editor.putString("studyMode", student.getStudyMode());
+                                    editor.putString("address", student.getAddress());
+                                    editor.putString("suburb", student.getSuburb());
+                                    editor.putString("nationality", student.getNationality());
+                                    editor.putString("nativeLanguage", student.getLanguage());
+                                    editor.putString("favoriteSport", student.getFavouriteSport());
+                                    editor.putString("favoriteMovie", student.getFavouriteMovie());
+                                    editor.putString("favouriteUnit", student.getFavouriteUnit());
+                                    editor.putString("currentJob", student.getCurrentJob());
+                                    editor.commit();
+                                    return 1;
+                                }
+
+                                @Override
+                                protected void onPostExecute(Integer info) {
+
+                                    Toast.makeText(getActivity().getApplicationContext(), "detail info", Toast.LENGTH_SHORT).show();
+                                    // refresh fragment
+                                    Fragment nextFragment = new FriendProfileFrag();
+                                    FragmentManager fragmentManager = getFragmentManager();
+                                    fragmentManager.beginTransaction().replace(R.id.content_main,
+                                            nextFragment).commit();
+                                }
+                            }.execute();
+
+                            break;
+                        case AlertDialog.BUTTON_POSITIVE:// "取消"第二个按钮取消对话框
+
                             new AsyncTask<String, Void, Integer>() {
 
                                 @Override
@@ -208,9 +263,29 @@ import edu.monash.swan.ass2.R;
                                 }
                             }.execute();
 
+
                             break;
-                        case AlertDialog.BUTTON_NEGATIVE:// "取消"第二个按钮取消对话框
+                        case AlertDialog.BUTTON_NEUTRAL:
+                            new AsyncTask<String, Void, Integer>() {
+
+                                @Override
+                                protected Integer doInBackground(String... params) {
+                                    String FavuriteMovie = mMyFriend.getFavoriteMovie();
+                                    editor.putString("FovuriteMovie", FavuriteMovie);
+                                    editor.commit();
+                                    return 1;
+                                }
+                                @Override
+                                protected void onPostExecute (Integer info) {
+                                    Fragment nextFragment = MovieFragment.newInstance(mMyFriend.getFavoriteMovie());
+                                    FragmentManager fragmentManager = getFragmentManager();
+                                    fragmentManager.beginTransaction().replace(R.id.content_main,
+                                            nextFragment).commit();
+                                }
+                            }.execute();
                             break;
+
+
                         default:
                             break;
                     }

@@ -1,35 +1,39 @@
 package edu.monash.swan.ass2.Bean;
 
-import java.util.Date;
+import org.json.JSONObject;
 
-/**
- * Created by owliz on 2017/5/10.
- */
+public class FriendshipNew {
 
-public class Friendship {
+
     private static final long serialVersionUID = 1L;
     private static Integer fsId = 1000;
-    protected FriendshipPK friendshipPK;
+    //  protected FriendshipPK friendshipPK;
     private Integer id;
     private String startingDate;
     private String endingDate;
-    private Student sid;
-    private Student fid;
+    private Integer sid;
+    private Integer fid;
 
-    public Friendship( String mStartDate, String mEndDate, Student mStudents, Student mStudents1) {
-        id=++fsId;
-        //friendshipPK = mFriendshipPK;
+    public FriendshipNew( String mStartDate, String mEndDate, Integer mStudents, Integer mStudents1) {
+        id=++fsId;;
         startingDate = mStartDate;
         endingDate = mEndDate;
         sid = mStudents;
         fid = mStudents1;
     }
+    public JSONObject convert(){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id", this.id);
+            jsonObject.put("fid", this.fid);
+            jsonObject.put("sid", this.sid);
+            jsonObject.put("startingDate", this.startingDate);
+            jsonObject.put("endingDate", this.endingDate);
 
-    public Friendship() {
-    }
-    public Friendship(String myMonashEmail, String friendMonashEmail) {
-       // this.friendshipPK = new FriendshipPK(myMonashEmail, friendMonashEmail);
-        this.id = ++fsId;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return jsonObject;
     }
     public Integer getId() {
         return id;
@@ -37,14 +41,6 @@ public class Friendship {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public FriendshipPK getFriendshipPK() {
-        return friendshipPK;
-    }
-
-    public void setFriendshipPK(FriendshipPK friendshipPK) {
-        this.friendshipPK = friendshipPK;
     }
 
     public String getStartingDate() {
@@ -63,19 +59,19 @@ public class Friendship {
         this.endingDate = endingDate;
     }
 
-    public Student getSid() {
+    public Integer getSid() {
         return sid;
     }
 
-    public void setSid(Student sid) {
+    public void setSid(Integer sid) {
         this.sid = sid;
     }
 
-    public Student getFid() {
+    public Integer getFid() {
         return fid;
     }
 
-    public void setFid(Student fid) {
+    public void setFid(Integer fid) {
         this.fid = fid;
     }
 

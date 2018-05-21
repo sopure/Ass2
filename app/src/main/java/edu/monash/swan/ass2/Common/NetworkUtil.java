@@ -22,6 +22,7 @@ import java.net.URLConnection;
 import java.util.Scanner;
 
 import edu.monash.swan.ass2.Bean.Friendship;
+import edu.monash.swan.ass2.Bean.FriendshipNew;
 import edu.monash.swan.ass2.Bean.Student;
 
 public class NetworkUtil {
@@ -155,7 +156,7 @@ public class NetworkUtil {
 
 
     public static String getId(String myId) {
-        final String methodPath = "findByMonashEmail/" + myId;
+        final String methodPath = "findByEmail/" + myId;
 //initialise
         URL url = null;
         HttpURLConnection conn = null;
@@ -252,7 +253,7 @@ public class NetworkUtil {
         //initialise
         URL url = null;
         HttpURLConnection conn = null;
-        final String methodPath = "";
+        final String methodPath = "addFriend/";
         try {
             Gson gson = new Gson();
             String stringCourseJson = gson.toJson(fsp);
@@ -279,6 +280,42 @@ public class NetworkUtil {
         } catch (Exception e) {
             e.printStackTrace();
             return 400;
+        } finally {
+            conn.disconnect();
+        }
+    }
+
+
+
+    public static void createFriendshipNew(String fs) {
+        final String methodPath ="addFriend/";
+        URL url = null;
+        HttpURLConnection conn = null;
+        String txtResult="";
+// Making HTTP request
+        try {
+            url = new URL(StudentFacadeREST + methodPath);
+//open the connection
+            conn = (HttpURLConnection) url.openConnection();
+//set the connection method to GET
+            conn.setRequestProperty("connection", "keep-alive");
+            conn.setUseCaches(false);//设置不要缓存
+            conn.setInstanceFollowRedirects(true);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            DataOutputStream os =new DataOutputStream(conn.getOutputStream());
+            os.writeBytes(fs);
+            os.flush();
+            final Integer STATUS = conn.getResponseCode();
+            if(STATUS==200||STATUS==204)
+                System.out.println("success!");
+            Log.i("add_log",new Integer(conn.getResponseCode()).toString());
+            os.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             conn.disconnect();
         }
