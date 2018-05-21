@@ -24,6 +24,7 @@ import edu.monash.swan.ass2.Common.Const;
 import edu.monash.swan.ass2.Common.NetworkUtil;
 import edu.monash.swan.ass2.Fragments.FindNewfragment;
 import edu.monash.swan.ass2.Fragments.FriendsFragment;
+import edu.monash.swan.ass2.Fragments.LocationReportPei;
 import edu.monash.swan.ass2.Fragments.MovieFragment;
 import edu.monash.swan.ass2.Fragments.ProfileFragment;
 import edu.monash.swan.ass2.Fragments.WeatherFragment;
@@ -154,7 +155,8 @@ public class MainActivity extends AppCompatActivity
                 mFragmentTransaction.replace(R.id.content_main, weatherFragment);
             }
         } else if (id == R.id.nav_locationReport) {
-
+            LocationReportPei locationReportPei= new LocationReportPei();
+            mFragmentTransaction.replace(R.id.content_main,locationReportPei);
         } else if (id == R.id.it_favoriteMovie) {
             /*Intent intent = new Intent(MainActivity.this, MovieActivity.class);
             startActivity(intent);*/
